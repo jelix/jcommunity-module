@@ -4,11 +4,11 @@ It provides:
 
 * user registration: account creation, with confirmation by email and activation key. The form contains a captcha.
 * users can choose their password
-* possibility to ask a new password when the user has loose his password (again, confirmation by email and activation key)
+* possibility to ask a new password when the user has lost his password (again, confirmation by email and activation key)
 * After a successful login, jcommunity can redirect to the page before the login
 * Profile editing
 * login/logout form
-* many new events in controllers, to allow you to do processing at each step of the registration and other actions, so your own module can verify or doing additional things.
+* many new events in controllers, to allow you to do processing at each step of the registration and other actions, so your own module can verify or do additional things.
 * notification messages with jMessage
 * a specific form for jauthdb_admin is provided
 * optional: authentification status can be synchronized with a phorum installation. (module jcommunity_phorum)
