@@ -11,7 +11,7 @@
         <homepageURL>https://github.com/laurentj/jcommunity/</homepageURL>
     </info>
     <dependencies>
-        <jelix minversion="1.1" maxversion="1.3.*"/>
+        <jelix minversion="1.4" maxversion="1.4.*"/>
         <module name="jcommunity" />
     </dependencies>
 </module>

@@ -19,16 +19,14 @@ class authphorumListener extends jEventListener{
    protected $enable = false;
 
    protected function getDaoName() {
-      global $gJCoord;
-      $plugin = $gJCoord->getPlugin('auth');
+      $plugin = jApp::coord()->getPlugin('auth');
       if($plugin === null)
           throw new jException('jelix~auth.error.plugin.missing');
       return $plugin->config['Db']['dao'];
    }
 
    function __construct() {
-      global $gJCoord;
-      $plugin = $gJCoord->getPlugin('auth');
+      $plugin = jApp::coord()->getPlugin('auth');
       if($plugin === null) {
          $this->enable = false;
          return;
