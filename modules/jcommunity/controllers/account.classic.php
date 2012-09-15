@@ -17,14 +17,14 @@ class accountCtrl extends jController {
       '*'=>array('auth.required'=>true),
       'show'=>array('auth.required'=>false)
     );
-
+    
     protected function getDaoName() {
         $plugin = jApp::coord()->getPlugin('auth');
         if($plugin === null)
             throw new jException('jelix~auth.error.plugin.missing');
         return $plugin->config['Db']['dao'];
     }
-
+    
     protected function getProfileName() {
         $plugin = jApp::coord()->getPlugin('auth');
         if($plugin === null)
@@ -38,11 +38,34 @@ class accountCtrl extends jController {
     function show() {
         $rep = $this->getResponse('html');
         $tpl = new jTpl();
-        $tpl->assign('username',$this->param('user'));
+        
+        $currentUser = jAuth::getUserSession();
+        $selectedUser = $this->param('user', $currentUser->login);
+        if ($currentUser->login != $selectedUser && ! jAcl2::check('auth.users.view')) {
+	        $plugin = jApp::coord()->getPlugin('jacl2');
+	        if ($plugin === null) {
+	            throw new jException('jelix~auth.error.plugin.missing');
+	        }
+	        switch (intval($plugin->config['on_error'])) {
+	        	case 1:	$rep = $this->getResponse('html');
+	        			$rep->body->assign('MAIN', jLocale::get($plugin->config['error_message']));
+	        			return $rep;
+	        			break;
+	        	
+	        	case 2:	$rep = $this->getResponse('redirect');
+	        			$rep->action = $plugin->config['on_error_action'];
+	        			return $rep;
+	        			break;
+	        	
+	        	default: throw new jException('Permissions error: auth.users.view');
+	        }
+        }
+        
+        $tpl->assign('username', $selectedUser);
 
         $users = jDao::get($this->getDaoName(), $this->getProfileName());
 
-        $user = $users->getByLogin($this->param('user'));
+        $user = $users->getByLogin($selectedUser);
         if(!$user || $user->status < JCOMMUNITY_STATUS_VALID) {
             $rep->body->assign('MAIN',$tpl->fetch('account_unknow'));
             return $rep;
