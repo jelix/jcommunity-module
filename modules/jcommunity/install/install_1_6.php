@@ -15,8 +15,9 @@ class jcommunityModuleInstaller extends jInstallerModule {
 
 
     function setupFramework() {
-        $authconfig = $this->config->getValue('auth','coordplugins');
-        $authconfigMaster = $this->config->getValue('auth','coordplugins', null, true);
+        $localConfig = $this->entryPoint->localConfigIni;
+        $authconfig = $localConfig->getValue('auth','coordplugins');
+        $authconfigMaster = $localConfig->getValue('auth','coordplugins', null, true);
         $forWS = (in_array($this->entryPoint->type, array('json', 'jsonrpc', 'soap', 'xmlrpc')));
         if (!$authconfig || ($forWS && $authconfig == $authconfigMaster)) {
             //if ($this->entryPoint->type == 'cmdline') {
@@ -71,12 +72,14 @@ class jcommunityModuleInstaller extends jInstallerModule {
             $conf = $this->getAuthConf();
             $conf->setValue('after_login', 'master_admin~default:index');
             $conf->save();
-            $this->config->setValue('loginResponse', 'htmlauth', 'jcommunity');
+            if ($localConfig->getValue('loginResponse', 'jcommunity') != 'htmlauth') {
+                $this->config->setValue('loginResponse', 'htmlauth', 'jcommunity');
+            }
         }
     }
 
     protected function getAuthConf() {
-        $authconfig = $this->config->getValue('auth','coordplugins');
+        $authconfig = $this->entryPoint->localConfigIni->getValue('auth','coordplugins');
         $confPath = jApp::configPath($authconfig);
         $conf = new jIniFileModifier($confPath);
         return $conf;
@@ -156,7 +159,7 @@ class jcommunityModuleInstaller extends jInstallerModule {
                 jAcl2DbManager::addSubject('jcommunity.prefs.change', 'jcommunity~prefs.admin.prefs.change', 'jprefs.prefs.management');
                 jAcl2DbManager::addRight('admins', 'jcommunity.prefs.change'); // for admin group
             }
-            if (!$this->config->getValue('disableJPref', 'jcommunity')) {
+            if (!$this->entryPoint->localConfigIni->getValue('disableJPref', 'jcommunity')) {
                 $prefIni = new jIniFileModifier(__DIR__.'/prefs.ini');
                 $prefFile = jApp::configPath('preferences.ini.php');
                 if (file_exists($prefFile)) {
