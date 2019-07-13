@@ -34,7 +34,7 @@ function initsystem () {
         apt-get install -y dirmngr
     fi
 
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys AC0E47584A7A714D
+    wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
     echo "deb https://packages.sury.org/php $DISTRO main" > /etc/apt/sources.list.d/sury_php.list
 
     if [ "$DISTRO" == "stretch" ]; then
@@ -68,9 +68,13 @@ function initsystem () {
                         php${PHP_VERSION}-dba \
                         php${PHP_VERSION}-xml \
                         php${PHP_VERSION}-mbstring \
-                        php-memcache \
                         php-memcached \
                         php-redis
+
+    if [ "$PHP_VERSION" != "7.3" ]; then
+        #not compatible with 7.3
+        apt-get -y install php-memcache
+    fi
 
     apt-get -y install mysql-server mysql-client
     apt-get -y install git vim unzip curl
@@ -80,6 +84,8 @@ function initsystem () {
         echo "setting mysql database.."
         mysql -u root -pjelix -e "CREATE DATABASE IF NOT EXISTS $APPNAME CHARACTER SET utf8;CREATE USER test_user IDENTIFIED BY 'jelix';GRANT ALL ON $APPNAME.* TO test_user;FLUSH PRIVILEGES;"
     fi
+
+    sed -i -- s/bind-address\s+127\.0\.0\.1/bind-address 0.0.0.0/g /etc/mysql/my.cnf
 
     # install default vhost for apache
     cp $VAGRANTDIR/jelixapp/vhost /etc/nginx/sites-available/$APPNAME.conf
@@ -112,6 +118,8 @@ function initsystem () {
         curl -sS https://getcomposer.org/installer | php
         mv composer.phar /usr/local/bin/composer
     fi
+
+    echo 'alias ll="ls -al"' > /home/vagrant/.bash_aliases
 }
 
 
@@ -170,6 +178,7 @@ function resetComposer() {
 }
 
 function initapp() {
-    php $1/install/installer.php
+    php $1/install/configurator.php --no-interaction --verbose
+    php $1/install/installer.php --verbose
 }
 

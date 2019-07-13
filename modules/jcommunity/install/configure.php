@@ -26,7 +26,7 @@ class jcommunityModuleConfigurator extends \Jelix\Installer\Module\Configurator 
         $cli = $helpers->cli();
         $this->parameters['eps'] = $cli->askEntryPoints(
             'Select entry points on which to setup authentication plugins.',
-            'classic',
+            $helpers->getEntryPointsByType('classic'),
             true
         );
 
@@ -97,7 +97,7 @@ class jcommunityModuleConfigurator extends \Jelix\Installer\Module\Configurator 
             $helpers->copyFile('var/config/'.$pluginIni, 'config:'.$pluginIni);
         }
         else {
-            list($conf, $section) = $entryPoint->getCoordPluginConf('auth');
+            list($conf, $section) = $entryPoint->getCoordPluginConfig('auth');
 
             if (!$this->getParameter('manualconfig')) {
                 $conf->setValue('driver', 'Db');

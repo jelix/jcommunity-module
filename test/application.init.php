@@ -17,8 +17,7 @@ jApp::initPaths(
     //$appPath.'www/',
     //$appPath.'var/',
     //$appPath.'var/log/',
-    //$appPath.'var/config/',
-    //$appPath.'scripts/'
+    //$appPath.'var/config/'
 );
 jApp::setTempBasePath(realpath($appPath.'temp/').'/');
 

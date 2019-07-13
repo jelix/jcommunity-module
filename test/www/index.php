@@ -9,7 +9,7 @@
 require ('../application.init.php');
 require (JELIX_LIB_CORE_PATH.'request/jClassicRequest.class.php');
 
-//checkAppOpened();
+checkAppOpened();
 
 jApp::loadConfig('index/config.ini.php');
 jApp::setCoord(new jCoordinator());

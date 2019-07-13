@@ -10,4 +10,4 @@
 
 require_once (__DIR__.'/../application.init.php');
 
-\Jelix\Scripts\Installer::launch();
+\Jelix\Scripts\Configure::launch();

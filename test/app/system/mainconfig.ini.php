@@ -4,29 +4,29 @@
 locale=fr_FR
 charset=UTF-8
 
-availableLocales = "fr_FR"
+availableLocales=fr_FR
 
 ; see http://www.php.net/manual/en/timezones.php for supported values
 timeZone="Europe/Paris"
 
 theme=default
 
-
 [modules]
-jelix.access=2
-test.access=2
-jcommunity.access=2
-jmessenger.access=2
-jcommunity.installparam=defaultuser
+jelix.enabled=on
+jelix.installparam="wwwfiles=vhost"
 
-jacl2.access=0
-jacl2db.access=0
+test.enabled=on
+jcommunity.enabled=on
+jcommunity.installparam="eps=index;defaultuser"
+jmessenger.enabled=on
 
-jacldb.access=0
-jauth.access=0
-jauthdb.access=0
-junittests.access=0
-jWSDL.access=0
+jacl2.enabled=off
+jacl2db.enabled=off
+
+jacldb.enabled=off
+jauth.enabled=off
+jauthdb.enabled=off
+jpref.enabled=off
 
 [coordplugins]
 auth=auth.coord.ini.php
@@ -45,7 +45,7 @@ checkCacheFiletime=on
 force=off
 
 [jResponseHtml]
-plugins =debugbar
+plugins=debugbar
 
 [urlengine]
 
@@ -70,23 +70,28 @@ basePath=
 notfoundAct=
 ;notfoundAct = "jelix~error:notfound"
 
-; liste des actions requerant https (syntaxe expliquée dessous), pour le moteur d'url simple
-simple_urlengine_https=
-
-
-[simple_urlengine_entrypoints]
-index="@classic"
-
-
 [fileLogger]
 default=messages.log
 
 
 [mailer]
 webmasterEmail="root@localhost"
-webmasterName="Root"
+webmasterName=Root
 mailerType=file
 
 
 [mailLogger]
 email="root@localhost"
+
+[jcommunity]
+loginResponse=html
+verifyNickname=on
+passwordChangeEnabled=on
+accountDestroyEnabled=on
+useJAuthDbAdminRights=off
+registrationEnabled=on
+resetPasswordEnabled=on
+disableJPref=on
+publicProperties[]=login
+publicProperties[]=nickname
+publicProperties[]=create_date

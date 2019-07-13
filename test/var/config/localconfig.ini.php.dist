@@ -4,9 +4,9 @@ forceHTTPPort=8024
 [jcommunity]
 ;loginResponse = html
 ;verifyNickname = on
-;registrationEnabled=on
-;resetPasswordEnabled=on
-;passwordChangeEnabled=on
+registrationEnabled=on
+resetPasswordEnabled=on
+passwordChangeEnabled=on
 ;accountDestroyEnabled=on
 ;useJAuthDbAdminRights=off
 ;publicProperties[]=login

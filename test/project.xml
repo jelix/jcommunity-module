@@ -8,17 +8,4 @@
         <copyright>2005-2015 Laurent Jouanneau and other contributors</copyright>
         <creator name="Laurent Jouanneau" email="laurent@jelix.org" active="true"/>
     </info>
-    <dependencies>
-       <jelix minversion="1.4" maxversion="1.7.*"/>
-    </dependencies>
-    <directories>
-        <config>var/config</config>
-        <log>var/log</log>
-        <var>var</var>
-        <www>www</www>
-        <temp>temp/</temp>
-    </directories>
-    <entrypoints>
-        <entry file="index.php" config="index/config.ini.php"/>
-    </entrypoints>
 </project>
