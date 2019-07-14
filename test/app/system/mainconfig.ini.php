@@ -17,7 +17,10 @@ jelix.installparam="wwwfiles=vhost"
 
 test.enabled=on
 jcommunity.enabled=on
-jcommunity.installparam="eps=index;defaultuser"
+
+jcommunity.installparam[eps]="[index]"
+jcommunity.installparam[defaultuser]=on
+
 jmessenger.enabled=on
 
 jacl2.enabled=off

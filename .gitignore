@@ -6,6 +6,8 @@ test/var/log/*
 !test/var/log/.dummy
 test/var/mails/*
 !test/var/mails/.dummy
+test/var/db/*
+!test/var/db/.dummy
 *.komodoproject
 test/var/config/profiles.ini.php
 test/var/config/localconfig.ini.php

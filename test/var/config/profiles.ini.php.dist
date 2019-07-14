@@ -6,11 +6,8 @@
 default=test
 
 [jdb:test]
-driver="mysqli"
-database="jcommunity"
-host= "localhost"
-user= "test_user"
-password=jelix
+driver="sqlite3"
+database="var:db/jcommunity.sqlite"
 persistent= on
-orce_encoding = on
+force_encoding = on
 
