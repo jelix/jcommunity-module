@@ -70,6 +70,7 @@ class Registration
     const CONFIRMATION_DONE = "ok";
     const CONFIRMATION_BAD_KEY = "badkey";
     const CONFIRMATION_BAD_STATUS = "badstatus";
+    const CONFIRMATION_EXPIRED_KEY = "expiredkey";
 
     /**
      * @return string one of CONFIRMATION_* const
@@ -91,7 +92,13 @@ class Registration
             return self::CONFIRMATION_BAD_KEY;
         }
 
-        // FIXME verify the date of the request to not accept a confirmation after X days
+        $dt = new \DateTime($user->request_date);
+        $dtNow = new \DateTime();
+        $dt->add(new \DateInterval('P2D')); // 48h
+        if ($dt < $dtNow ) {
+            return self::CONFIRMATION_EXPIRED_KEY;
+        }
+
         $user->keyactivate = '';
         $user->status = Account::STATUS_VALID;
         \jEvent::notify('jcommunity_registration_confirm', array('user' => $user));
