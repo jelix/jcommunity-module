@@ -86,7 +86,7 @@ class jcommunityModuleInstaller extends \Jelix\Installer\Module\Installer {
                 list(,$sourceUserDataModule,$sourceUserDataFile) = $m;
             }
             else if ($this->getParameter('defaultuser')) {
-                $sourceUserDataFile = 'defaultuser.json';
+                $sourceUserDataFile = 'defaultusers.json';
             }
 
             if ($sourceUserDataFile) {
