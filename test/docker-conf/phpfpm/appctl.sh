@@ -119,7 +119,7 @@ function launch() {
     if [ ! -d $APPDIR/vendor ]; then
       composerInstall
     fi
-    ls -al $APPDIR/var/config/
+
     launchInstaller
     setRights
     cleanTmp
