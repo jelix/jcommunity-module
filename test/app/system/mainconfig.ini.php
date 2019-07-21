@@ -23,14 +23,18 @@ jcommunity.installparam[defaultuser]=on
 
 jmessenger.enabled=on
 
-jacl2.enabled=off
-jacl2db.enabled=off
+jacl2.enabled=on
+jacl2db.enabled=on
 
 jacldb.enabled=off
 jauth.enabled=off
 jauthdb.enabled=off
 jpref.enabled=off
 
+jacl2.installparam[eps]="[index,admin]"
+jauthdb_admin.enabled=on
+master_admin.enabled=on
+jacl2db_admin.enabled=on
 [coordplugins]
 auth=auth.coord.ini.php
 
@@ -98,3 +102,9 @@ disableJPref=on
 publicProperties[]=login
 publicProperties[]=nickname
 publicProperties[]=create_date
+
+[acl2]
+driver=db
+[webassets_common]
+master_admin.css[]="$jelix/design/master_admin.css"
+jacl2_admin.css[]="$jelix/design/jacl2.css"

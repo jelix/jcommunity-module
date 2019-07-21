@@ -7,4 +7,10 @@
         <url pathinfo="/registration" module="jcommunity" include="urls_registration.xml"/>
         <url pathinfo="/messenger" module="jmessenger" include="urls.xml"/>
     </classicentrypoint>
+    <entrypoint name="admin" type="classic">
+        <url pathinfo="/" module="master_admin" action="default:index" default="true"/>
+        <url module="master_admin"/>
+        <url include="urls.xml" pathinfo="/admin/auth" module="jauthdb_admin"/>
+        <url include="urls.xml" pathinfo="/admin/acl" module="jacl2db_admin"/>
+    </entrypoint>
 </urls>
