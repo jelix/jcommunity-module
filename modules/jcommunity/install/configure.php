@@ -17,6 +17,8 @@ class jcommunityModuleConfigurator extends \Jelix\Installer\Module\Configurator 
             'masteradmin' => false,
             'migratejauthdbusers' => true,
             'usejpref' => false,
+            'defaultusers'=> '', // selector of a json file in an install/ of a module
+            'defaultuser' => true, // install users from defaultusers.json
             'eps'=>array()
         );
     }
@@ -45,9 +47,10 @@ class jcommunityModuleConfigurator extends \Jelix\Installer\Module\Configurator 
             $this->parameters['manualconfig'] = false;
         }
 
-        $this->parameters['migratejauthdbusers'] = $cli->askConfirmation('Do you want to migrate users from the jlx_user table to the jcommunity table?', true);
-        $this->parameters['masteradmin'] = $cli->askConfirmation('Do you use jCommunity with the master_admin module?', false);
-        $this->parameters['usejpref'] = $cli->askConfirmation('Do you want to use jPref to manage some parameters?', false);
+        $this->parameters['migratejauthdbusers'] = $cli->askConfirmation('Do you want to migrate users from the jlx_user table to the jcommunity table?', $this->parameters['migratejauthdbusers']);
+        $this->parameters['defaultuser'] = $cli->askConfirmation('Do you want to create default users into the jcommunity table?', $this->parameters['defaultuser']);
+        $this->parameters['masteradmin'] = $cli->askConfirmation('Do you use jCommunity with the master_admin module?', $this->parameters['masteradmin']);
+        $this->parameters['usejpref'] = $cli->askConfirmation('Do you want to use jPref to manage some parameters?', $this->parameters['usejpref']);
 
 
         // retrieve current jcommunity section
@@ -127,7 +130,7 @@ class jcommunityModuleConfigurator extends \Jelix\Installer\Module\Configurator 
         }
 
         if ($this->getParameter('masteradmin')) {
-            list($conf, $section) = $entryPoint->getCoordPluginConf('auth');
+            list($conf, $section) = $entryPoint->getCoordPluginConfig('auth');
             $conf->setValue('after_login', 'master_admin~default:index');
             $conf->save();
             $configIni->setValue('loginResponse', 'htmlauth', 'jcommunity');
