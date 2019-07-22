@@ -13,28 +13,33 @@ theme=default
 
 [modules]
 jelix.enabled=on
-jelix.installparam="wwwfiles=vhost"
+jelix.installparam[wwwfiles]=vhost
 
 test.enabled=on
 jcommunity.enabled=on
 
-jcommunity.installparam[eps]="[index]"
+jcommunity.installparam[manualconfig]=on
+jcommunity.installparam[eps]="[index,admin]"
 jcommunity.installparam[defaultuser]=on
 
 jmessenger.enabled=on
 
 jacl2.enabled=on
+jacl2.installparam[eps]="[index,admin]"
+
 jacl2db.enabled=on
+jacl2db.installparam[defaultuser]=on
+jacl2db.installparam[defaultgroups]=on
 
 jacldb.enabled=off
 jauth.enabled=off
 jauthdb.enabled=off
 jpref.enabled=off
 
-jacl2.installparam[eps]="[index,admin]"
 jauthdb_admin.enabled=on
 master_admin.enabled=on
 jacl2db_admin.enabled=on
+
 [coordplugins]
 auth=auth.coord.ini.php
 
@@ -43,7 +48,7 @@ html=testResponse
 
 
 [error_handling]
-messageLogFormat="%date%\t[%code%]\t%msg%\t%file%\t%line%\n"
+messageLogFormat="%date%\t%ip%\t[%code%]\t%msg%\n\tat: %file%\t%line%\n\turl: %url%\n\t%http_method%: %params%\n\treferer: %referer%\n%trace%\n\n"
 errorMessage="Une erreur technique est survenue. Désolé pour ce désagrément."
 
 
@@ -77,6 +82,7 @@ basePath=
 notfoundAct=
 ;notfoundAct = "jelix~error:notfound"
 
+jelixWWWPath="jelix/"
 [fileLogger]
 default=messages.log
 
@@ -95,7 +101,7 @@ loginResponse=html
 verifyNickname=on
 passwordChangeEnabled=on
 accountDestroyEnabled=on
-useJAuthDbAdminRights=off
+useJAuthDbAdminRights=on
 registrationEnabled=on
 resetPasswordEnabled=on
 disableJPref=on
@@ -108,3 +114,6 @@ driver=db
 [webassets_common]
 master_admin.css[]="$jelix/design/master_admin.css"
 jacl2_admin.css[]="$jelix/design/jacl2.css"
+
+[session]
+storage=
