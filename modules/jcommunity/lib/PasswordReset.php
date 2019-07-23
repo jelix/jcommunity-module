@@ -11,7 +11,10 @@ namespace Jelix\JCommunity;
 
 class PasswordReset {
 
-    function sendEmail($login, $email) {
+    function sendEmail($login, $email, $rightStatus=1,
+                       $tplId = 'jcommunity~mail_password_change',
+                       $mailLinkAction = 'jcommunity~password_reset:resetform'
+    ) {
         $user = \jAuth::getUser($login);
         if (!$user || $user->email == '' || $user->email != $email) {
             return self::RESET_BAD_LOGIN_EMAIL;
@@ -21,12 +24,17 @@ class PasswordReset {
             return self::RESET_BAD_STATUS;
         }
 
-        if ($user->status != Account::STATUS_VALID && $user->status != Account::STATUS_PWD_CHANGED) {
+        if ($user->status != Account::STATUS_VALID &&
+            $user->status != Account::STATUS_PWD_CHANGED &&
+            $user->status != $rightStatus
+        ) {
             return self::RESET_BAD_STATUS;
         }
 
         $key = sha1(password_hash($login.$email.microtime(),PASSWORD_DEFAULT));
-        $user->status = Account::STATUS_PWD_CHANGED;
+        if ($user->status != Account::STATUS_NEW) {
+            $user->status = Account::STATUS_PWD_CHANGED;
+        }
         $user->request_date = date('Y-m-d H:i:s');
         $user->keyactivate = $key;
         \jAuth::updateUser($user);
@@ -38,12 +46,12 @@ class PasswordReset {
         $mail->Sender = \jApp::config()->mailer['webmasterEmail'];
         $mail->Subject = \jLocale::get('password.mail.pwd.change.subject', $domain);
 
-        $tpl = $mail->Tpl('mail_password_change', true);
+        $tpl = $mail->Tpl($tplId, true);
         $tpl->assign('user', $user);
         $tpl->assign('domain_name', $domain);
         $tpl->assign('website_uri', \jApp::coord()->request->getServerURI());
         $tpl->assign('confirmation_link', \jUrl::getFull(
-            'jcommunity~password_reset:resetform',
+            $mailLinkAction,
             array('login' => $user->login, 'key' => $user->keyactivate)
         ));
 
@@ -64,10 +72,11 @@ class PasswordReset {
     /**
      * @param string $login
      * @param string $key
+     * @param integer $expectedStatus
      * @return object|string
      * @throws \Exception
      */
-    function checkKey($login, $key)
+    function checkKey($login, $key, $expectedStatus)
     {
         if ($login == '' || $key == '') {
             return self::RESET_BAD_KEY;
@@ -76,7 +85,7 @@ class PasswordReset {
         if (!$user) {
             return self::RESET_BAD_KEY;
         }
-        if ($user->status != Account::STATUS_PWD_CHANGED) {
+        if ($user->status != Account::STATUS_PWD_CHANGED && $user->status != $expectedStatus) {
             if ($user->status != Account::STATUS_VALID) {
                 return self::RESET_ALREADY_DONE;
             }
