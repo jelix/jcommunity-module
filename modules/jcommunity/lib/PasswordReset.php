@@ -64,10 +64,11 @@ class PasswordReset {
     /**
      * @param string $login
      * @param string $key
+     * @param integer $expectedStatus
      * @return object|string
      * @throws \Exception
      */
-    function checkKey($login, $key)
+    function checkKey($login, $key, $expectedStatus)
     {
         if ($login == '' || $key == '') {
             return self::RESET_BAD_KEY;
@@ -76,7 +77,7 @@ class PasswordReset {
         if (!$user) {
             return self::RESET_BAD_KEY;
         }
-        if ($user->status != Account::STATUS_PWD_CHANGED) {
+        if ($user->status != Account::STATUS_PWD_CHANGED && $user->status != $expectedStatus) {
             if ($user->status != Account::STATUS_VALID) {
                 return self::RESET_ALREADY_DONE;
             }
