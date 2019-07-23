@@ -9,7 +9,7 @@
 
 class jcommunityModuleUpgrader_updatekeyfield2019 extends jInstallerModule {
 
-    public $targetVersions = array('1.3.0');
+    public $targetVersions = array('1.3.0-beta.1');
     public $date = '2019-07-17 17:00';
 
     function install() {
