@@ -104,6 +104,7 @@ accountDestroyEnabled=on
 useJAuthDbAdminRights=on
 registrationEnabled=on
 resetPasswordEnabled=on
+resetPasswordAdminEnabled=on
 disableJPref=on
 publicProperties[]=login
 publicProperties[]=nickname
