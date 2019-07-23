@@ -1,4 +1,4 @@
-{meta Subject 'Réinitialisation de mot de passe sur le site '.$domain_name}
+{meta Subject 'Réinitialisation de votre mot de passe sur le site '.$domain_name}
 <p>Bonjour,</p>
 
 <p>Vous venez de demander une réinitialisation du mot de passe de votre

@@ -37,6 +37,22 @@ class Registration
     }
 
     /**
+     * @param \jFormsBase $form
+     */
+    public function createUserByAdmin($user) {
+        $config = new \Jelix\JCommunity\Config();
+        if ($config->isResetAdminPasswordEnabledForAdmin()) {
+            $key = sha1(password_hash($user->login.$user->password.microtime(),PASSWORD_DEFAULT));
+            $user->status = Account::STATUS_NEW;
+            $user->request_date = date('Y-m-d H:i:s');
+            $user->keyactivate = $key;
+            \jAuth::updateUser($user);
+            $this->sendRegistrationMail($user, 'jcommunity~mail_admin_registration', 'jcommunity~password_confirm_registration:resetform');
+        }
+    }
+
+
+    /**
      * Create the user account and send an email.
      *
      * @param object $user the user created with createUser()
@@ -44,20 +60,26 @@ class Registration
     public function createAccount($user)
     {
         \jAuth::saveNewUser($user);
+        $this->sendRegistrationMail($user);
+    }
 
+    protected function sendRegistrationMail($user,
+                                            $tplId = 'jcommunity~mail_registration',
+                                            $mailLinkAction = 'jcommunity~registration:confirm'
+    ) {
         $domain = \jApp::coord()->request->getDomainName();
         $mail = new \jMailer();
         $mail->From = \jApp::config()->mailer['webmasterEmail'];
         $mail->FromName = \jApp::config()->mailer['webmasterName'];
         $mail->Sender = \jApp::config()->mailer['webmasterEmail'];
-        $mail->Subject = \jLocale::get('register.mail.new.subject', $domain);
+        $mail->Subject = \jLocale::get('jcommunity~register.mail.new.subject', $domain);
 
-        $tpl = $mail->Tpl('mail_registration', true);
+        $tpl = $mail->Tpl($tplId, true);
         $tpl->assign('user', $user);
         $tpl->assign('domain_name', $domain);
         $tpl->assign('website_uri', \jApp::coord()->request->getServerURI());
         $tpl->assign('confirmation_link', \jUrl::getFull(
-            'jcommunity~registration:confirm',
+            $mailLinkAction,
             array('login' => $user->login, 'key' => $user->keyactivate)
         ));
 
