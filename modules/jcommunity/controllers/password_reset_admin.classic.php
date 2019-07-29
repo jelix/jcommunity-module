@@ -91,7 +91,7 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractPasswordControl
         $passReset = new \Jelix\JCommunity\PasswordReset();
         $result = $passReset->sendEmail($login, $user->email,
             \Jelix\JCommunity\Account::STATUS_NEW,
-            'jcommunity~mail_password_adminreset',
+            'jcommunity~mail.password.admin.reset.body.html',
             'jcommunity~password_reset_admin:resetform');
         if ($result != $passReset::RESET_OK) {
             $rep = $this->_getjCommunityResponse();

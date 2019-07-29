@@ -47,7 +47,7 @@ class Registration
             $user->request_date = date('Y-m-d H:i:s');
             $user->keyactivate = $key;
             \jAuth::updateUser($user);
-            $this->sendRegistrationMail($user, 'jcommunity~mail_admin_registration', 'jcommunity~password_confirm_registration:resetform');
+            $this->sendRegistrationMail($user, 'jcommunity~mail.registration.admin.body.html', 'jcommunity~password_confirm_registration:resetform');
         }
     }
 
@@ -64,7 +64,7 @@ class Registration
     }
 
     protected function sendRegistrationMail($user,
-                                            $tplId = 'jcommunity~mail_registration',
+                                            $tplLocaleId = 'jcommunity~mail.registration.body.html',
                                             $mailLinkAction = 'jcommunity~registration:confirm'
     ) {
         $domain = \jApp::coord()->request->getDomainName();
@@ -72,9 +72,11 @@ class Registration
         $mail->From = \jApp::config()->mailer['webmasterEmail'];
         $mail->FromName = \jApp::config()->mailer['webmasterName'];
         $mail->Sender = \jApp::config()->mailer['webmasterEmail'];
-        $mail->Subject = \jLocale::get('jcommunity~register.mail.new.subject', $domain);
+        $mail->Subject = \jLocale::get('jcommunity~mail.registration.subject', $domain);
+        $mail->AddAddress($user->email);
+        $mail->isHtml(true);
 
-        $tpl = $mail->Tpl($tplId, true);
+        $tpl = new \jTpl();
         $tpl->assign('user', $user);
         $tpl->assign('domain_name', $domain);
         $tpl->assign('website_uri', \jApp::coord()->request->getServerURI());
@@ -83,7 +85,8 @@ class Registration
             array('login' => $user->login, 'key' => $user->keyactivate)
         ));
 
-        $mail->AddAddress($user->email);
+        $body = $tpl->fetchFromString(\jLocale::get($tplLocaleId), 'html');
+        $mail->msgHTML($body, '', array($mail, 'html2textKeepLinkSafe'));
         $mail->Send();
     }
 

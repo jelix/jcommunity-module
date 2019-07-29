@@ -12,7 +12,7 @@ namespace Jelix\JCommunity;
 class PasswordReset {
 
     function sendEmail($login, $email, $rightStatus=1,
-                       $tplId = 'jcommunity~mail_password_change',
+                       $tplLocaleId = 'jcommunity~mail.password.reset.body.html',
                        $mailLinkAction = 'jcommunity~password_reset:resetform'
     ) {
         $user = \jAuth::getUser($login);
@@ -44,9 +44,11 @@ class PasswordReset {
         $mail->From = \jApp::config()->mailer['webmasterEmail'];
         $mail->FromName = \jApp::config()->mailer['webmasterName'];
         $mail->Sender = \jApp::config()->mailer['webmasterEmail'];
-        $mail->Subject = \jLocale::get('password.mail.pwd.change.subject', $domain);
+        $mail->Subject = \jLocale::get('jcommunity~mail.password.reset.subject', $domain);
+        $mail->AddAddress($user->email);
+        $mail->isHtml(true);
 
-        $tpl = $mail->Tpl($tplId, true);
+        $tpl = new \jTpl();
         $tpl->assign('user', $user);
         $tpl->assign('domain_name', $domain);
         $tpl->assign('website_uri', \jApp::coord()->request->getServerURI());
@@ -54,8 +56,8 @@ class PasswordReset {
             $mailLinkAction,
             array('login' => $user->login, 'key' => $user->keyactivate)
         ));
-
-        $mail->AddAddress($user->email);
+        $body = $tpl->fetchFromString(\jLocale::get($tplLocaleId), 'html');
+        $mail->msgHTML($body, '', array($mail, 'html2textKeepLinkSafe'));
         $mail->Send();
 
         return self::RESET_OK;
