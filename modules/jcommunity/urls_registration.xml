@@ -20,4 +20,8 @@
     <url pathinfo="/admin-password-reset/send"      action="password_reset_admin:send"/>
     <url pathinfo="/admin-password-reset/sent"      action="password_reset_admin:sent"/>
 
+    <url pathinfo="/confirm/resend-validation/"  action="registration_admin_resend:index" />
+    <url pathinfo="/confirm/resend-validation/send"  action="registration_admin_resend:send" />
+    <url pathinfo="/confirm/resend-validation/sent"  action="registration_admin_resend:sent" />
+
 </suburls>
