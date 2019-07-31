@@ -33,7 +33,6 @@ class authadmincommunityListener extends jEventListener{
             $tpl->assign('canChangePass', false);
             $links = $tpl->get('otherLinks');
             $status = $form->getData('status');
-            $keyactivate = $form->getData('keyactivate');
             if ($status == \Jelix\JCommunity\Account::STATUS_NEW) {
                 $links[] = array(
                     'url' => jUrl::get('jcommunity~registration_admin_resend:index', array('login'=>$tpl->get('id'))),

@@ -39,6 +39,7 @@ class PasswordReset {
     {
         $user = \jAuth::getUser($login);
         if (!$user || $user->email == '' || $user->email != $email) {
+            \jLog::log('A password reset is attempted for unknown user "'.$login.'" and/or unknown email  "'.$email.'"', 'warning');
             return self::RESET_BAD_LOGIN_EMAIL;
         }
 

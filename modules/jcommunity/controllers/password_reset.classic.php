@@ -56,7 +56,7 @@ class password_resetCtrl extends \Jelix\JCommunity\AbstractPasswordController
 
         $passReset = new \Jelix\JCommunity\PasswordReset();
         $result = $passReset->sendEmail($login, $email);
-        if ($result != $passReset::RESET_OK) {
+        if ($result != $passReset::RESET_OK && $result != $passReset::RESET_BAD_LOGIN_EMAIL) {
             $form->setErrorOn('pass_login', jLocale::get('password.form.change.error.'.$result));
             return $rep;
         }
