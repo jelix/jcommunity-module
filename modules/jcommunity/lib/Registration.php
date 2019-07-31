@@ -25,13 +25,13 @@ class Registration
         if (\jAuth::getUser($login)) {
             throw new \LogicException("User $login already exists");
         }
-        $key = sha1(password_hash($login.$password.microtime(),PASSWORD_DEFAULT));
+        $key = sha1(password_hash($login.$password.microtime(), PASSWORD_DEFAULT));
 
         $user = \jAuth::createUserObject($login, $password);
         $user->email = $email;
         $user->status = Account::STATUS_NEW;
         $user->request_date = date('Y-m-d H:i:s');
-        $user->keyactivate = $key;
+        $user->keyactivate = 'U:'.$key;
 
         return $user;
     }
@@ -42,12 +42,14 @@ class Registration
     public function createUserByAdmin($user) {
         $config = new \Jelix\JCommunity\Config();
         if ($config->isResetAdminPasswordEnabledForAdmin()) {
-            $key = sha1(password_hash($user->login.$user->password.microtime(),PASSWORD_DEFAULT));
+            $key = sha1(password_hash($user->login.$user->password.microtime(), PASSWORD_DEFAULT));
             $user->status = Account::STATUS_NEW;
             $user->request_date = date('Y-m-d H:i:s');
-            $user->keyactivate = $key;
+            $user->keyactivate = 'A:'.$key;
             \jAuth::updateUser($user);
-            $this->sendRegistrationMail($user, 'jcommunity~mail.registration.admin.body.html', 'jcommunity~password_confirm_registration:resetform');
+            $this->sendRegistrationMail($user,
+                'jcommunity~mail.registration.admin.body.html',
+                'jcommunity~password_confirm_registration:resetform');
         }
     }
 
@@ -60,13 +62,35 @@ class Registration
     public function createAccount($user)
     {
         \jAuth::saveNewUser($user);
-        $this->sendRegistrationMail($user);
+        $this->sendRegistrationMail($user,
+            'jcommunity~mail.registration.body.html',
+            'jcommunity~registration:confirm');
     }
 
-    protected function sendRegistrationMail($user,
-                                            $tplLocaleId = 'jcommunity~mail.registration.body.html',
-                                            $mailLinkAction = 'jcommunity~registration:confirm'
-    ) {
+    public function resendRegistrationMail($user)
+    {
+        $key = sha1(password_hash($user->login.$user->password.microtime(), PASSWORD_DEFAULT));
+        $user->status = Account::STATUS_NEW;
+        $user->request_date = date('Y-m-d H:i:s');
+        if (preg_match('/^([AU]):/', $user->keyactivate , $m) && $m[1] == 'A') {
+            $user->keyactivate = 'A:'.$key;
+            \jAuth::updateUser($user);
+            $this->sendRegistrationMail($user,
+                'jcommunity~mail.registration.admin.body.html',
+                'jcommunity~password_confirm_registration:resetform');
+        }
+        else {
+            $user->keyactivate = 'U:'.$key;
+            \jAuth::updateUser($user);
+            $this->sendRegistrationMail($user,
+                'jcommunity~mail.registration.body.html',
+                'jcommunity~registration:confirm');
+        }
+    }
+
+
+    protected function sendRegistrationMail($user, $tplLocaleId, $mailLinkAction)
+    {
         $domain = \jApp::coord()->request->getDomainName();
         $mail = new \jMailer();
         $mail->From = \jApp::config()->mailer['webmasterEmail'];
@@ -82,7 +106,7 @@ class Registration
         $tpl->assign('website_uri', \jApp::coord()->request->getServerURI());
         $tpl->assign('confirmation_link', \jUrl::getFull(
             $mailLinkAction,
-            array('login' => $user->login, 'key' => $user->keyactivate)
+            array('login' => $user->login, 'key' => substr($user->keyactivate, 2))
         ));
 
         $body = $tpl->fetchFromString(\jLocale::get($tplLocaleId), 'html');
@@ -113,7 +137,16 @@ class Registration
             return self::CONFIRMATION_BAD_STATUS;
         }
 
-        if ($user->keyactivate == '' || $key != $user->keyactivate) {
+        if ($user->keyactivate == '') {
+            return self::CONFIRMATION_BAD_KEY;
+        }
+
+        $keyactivate = $user->keyactivate;
+        if (preg_match('/^([AU]:)(.+)$/', $keyactivate , $m)) {
+            $keyactivate = $m[2];
+        }
+
+        if ($keyactivate != $key) {
             return self::CONFIRMATION_BAD_KEY;
         }
 

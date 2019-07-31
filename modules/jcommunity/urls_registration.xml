@@ -19,8 +19,5 @@
     <url pathinfo="/admin-password-reset/"          action="password_reset_admin:index" />
     <url pathinfo="/admin-password-reset/send"      action="password_reset_admin:send"/>
     <url pathinfo="/admin-password-reset/sent"      action="password_reset_admin:sent"/>
-    <url pathinfo="/admin-password-reset/reset"     action="password_reset_admin:resetform"/>
-    <url pathinfo="/admin-password-reset/save"      action="password_reset_admin:save"/>
-    <url pathinfo="/admin-password-reset/changed"   action="password_reset_admin:changed"/>
 
 </suburls>

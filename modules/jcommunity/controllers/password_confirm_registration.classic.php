@@ -21,7 +21,7 @@ class password_confirm_registrationCtrl extends \Jelix\JCommunity\AbstractPasswo
 
     protected $formPasswordTpl = 'password_reset_create';
 
-    protected $forRegistrationByAdmin = true;
-
     protected $actionController = 'password_confirm_registration';
+
+    protected $forRegistration = true;
 }

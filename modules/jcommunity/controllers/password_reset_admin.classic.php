@@ -12,23 +12,12 @@
 /**
  * controller for the reset password process, initiated by an admin
  */
-class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractPasswordController
+class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
 {
 
     public $pluginParams = array(
-        '*' => array('auth.required' => false),
-        'index' => array('auth.required' => true),
-        'send' => array('auth.required' => true),
-        'sent' => array('auth.required' => true),
+        '*' => array('auth.required' => true)
     );
-
-    protected $configMethodCheck = 'isResetAdminPasswordEnabled';
-
-    protected $formPasswordTitle = 'password.form.create.title';
-
-    protected $formPasswordTpl = 'password_reset_create';
-
-    protected $forRegistrationByAdmin = false;
 
     protected $actionController = 'password_reset_admin';
 
@@ -88,19 +77,29 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractPasswordControl
         $rep = $this->getResponse('redirect');
         $rep->action = 'password_reset_admin:index';
 
-        $passReset = new \Jelix\JCommunity\PasswordReset();
-        $result = $passReset->sendEmail($login, $user->email,
-            \Jelix\JCommunity\Account::STATUS_NEW,
-            'jcommunity~mail.password.admin.reset.body.html',
-            'jcommunity~password_reset_admin:resetform');
-        if ($result != $passReset::RESET_OK) {
+        if ($user->status == \Jelix\JCommunity\Account::STATUS_NEW) {
+            $registration = new \Jelix\JCommunity\Registration();
+            $registration->resendRegistrationMail($user);
+            $result = \Jelix\JCommunity\PasswordReset::RESET_OK;
+        }
+        else if ($user->status == \Jelix\JCommunity\Account::STATUS_VALID ||
+            $user->status == \Jelix\JCommunity\Account::STATUS_PWD_CHANGED
+        ) {
+            $passReset = new \Jelix\JCommunity\PasswordReset(true, true);
+            $result = $passReset->sendEmail($login, $user->email);
+        }
+        else {
+            $result = \Jelix\JCommunity\PasswordReset::RESET_BAD_STATUS;
+        }
+
+        if ($result != \Jelix\JCommunity\PasswordReset::RESET_OK) {
             $rep = $this->_getjCommunityResponse();
             $rep->title = jLocale::get('password.form.title');
 
             $tpl = new \jTpl();
             $tpl->assign('login', $login);
-            $tpl->assign('error', jLocale::get('password.form.change.error.'.$result));
-            $rep->body->assign('MAIN', $tpl->fetch('password_reset_admin_error'));
+            $tpl->assign('error', jLocale::get('jcommunity~password.form.change.error.admin.'.$result));
+            $rep->body->assign('MAIN', $tpl->fetch('jcommunity~password_reset_admin_error'));
             return $rep;
         }
 
@@ -132,8 +131,4 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractPasswordControl
 
         return $rep;
     }
-
-
-    // see other actions into AbstractPasswordController
-
 }
