@@ -10,7 +10,7 @@
  */
 
 /**
- * controller for the reset password process, initiated by an admin
+ * controller for the password reset process, initiated by an admin
  */
 class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
 {
@@ -18,8 +18,6 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
     public $pluginParams = array(
         '*' => array('auth.required' => true)
     );
-
-    protected $actionController = 'password_reset_admin';
 
     protected function _checkadmin()
     {
@@ -31,7 +29,7 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
 
 
     /**
-     * form to request a reset password.
+     * form to confirm the password reset
      */
     public function index()
     {

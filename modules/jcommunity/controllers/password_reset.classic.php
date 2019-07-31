@@ -10,14 +10,14 @@
 */
 
 /**
- * controller for the reset password process, when a user has forgotten his
+ * controller for the password reset process, when a user has forgotten his
  * password, and want to change it
  */
 class password_resetCtrl extends \Jelix\JCommunity\AbstractPasswordController
 {
 
     /**
-     * form to request a reset password.
+     * form to request a password reset.
      */
     public function index()
     {

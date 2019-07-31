@@ -10,7 +10,7 @@
  */
 
 /**
- * controller for the reset password process, initiated by an administrator
+ * controller for the password reset process, initiated by an administrator
  */
 class password_confirm_registrationCtrl extends \Jelix\JCommunity\AbstractPasswordController
 {
