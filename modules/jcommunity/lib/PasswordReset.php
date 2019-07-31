@@ -79,6 +79,9 @@ class PasswordReset {
             'jcommunity~password_reset:resetform',
             array('login' => $user->login, 'key' => $key)
         ));
+        $config = new Config();
+        $tpl->assign('validationKeyTTL', $config->getValidationKeyTTLAsString());
+
         $body = $tpl->fetchFromString(\jLocale::get($this->tplLocaleId), 'html');
         $mail->msgHTML($body, '', array($mail, 'html2textKeepLinkSafe'));
         $mail->Send();
@@ -137,9 +140,10 @@ class PasswordReset {
             return self::RESET_BAD_STATUS;
         }
 
+        $config = new Config();
         $dt = new \DateTime($user->request_date);
         $dtNow = new \DateTime();
-        $dt->add(new \DateInterval('P2D')); // 48h
+        $dt->add($config->getValidationKeyTTL());
         if ($dt < $dtNow ) {
             return self::RESET_EXPIRED_KEY;
         }

@@ -100,6 +100,7 @@ class Registration
         $mail->AddAddress($user->email);
         $mail->isHtml(true);
 
+        $config = new Config();
         $tpl = new \jTpl();
         $tpl->assign('user', $user);
         $tpl->assign('domain_name', $domain);
@@ -108,6 +109,7 @@ class Registration
             $mailLinkAction,
             array('login' => $user->login, 'key' => substr($user->keyactivate, 2))
         ));
+        $tpl->assign('validationKeyTTL', $config->getValidationKeyTTLAsString());
 
         $body = $tpl->fetchFromString(\jLocale::get($tplLocaleId), 'html');
         $mail->msgHTML($body, '', array($mail, 'html2textKeepLinkSafe'));
@@ -150,9 +152,10 @@ class Registration
             return self::CONFIRMATION_BAD_KEY;
         }
 
-        $dt = new \DateTime($user->request_date);
+        $config = new Config();
         $dtNow = new \DateTime();
-        $dt->add(new \DateInterval('P2D')); // 48h
+        $dt = new \DateTime($user->request_date);
+        $dt->add($config->getValidationKeyTTL()); // 48h
         if ($dt < $dtNow ) {
             return self::CONFIRMATION_EXPIRED_KEY;
         }
