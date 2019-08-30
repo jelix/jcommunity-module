@@ -107,7 +107,7 @@ Setup with Jelix 1.7
 Launch the configurator for your application to enable the module
 
 ```bash
-php yourapp/cmd.php module:configure jcommunity
+php yourapp/dev.php module:configure jcommunity
 ```
 
 It will asks you some values for configuration parameters (see parameters in
@@ -118,7 +118,7 @@ With jCommunity 1.1+, you can use jPref to allow to change some settings. If you
 want to use it, you should also install the jpref module:
 
 ```bash
-php yourapp/cmd.php module:configure jpref
+php yourapp/dev.php module:configure jpref
 ```
 
 Finishing the setup
