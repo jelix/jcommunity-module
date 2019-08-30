@@ -186,12 +186,12 @@ class jcommunityModuleInstaller extends jInstallerModule {
     protected function migrateUsers($daoSelectorStr) {
         $dao = jDao::get($daoSelectorStr);
         $tableProp = $dao->getTables()[$dao->getPrimaryTable()];
+        $cn = $this->dbConnection();
 
-        if ($tableProp['realname'] == 'jlx_user') {
+        if ($tableProp['realname'] == $cn->prefixTable('jlx_user')) {
             return;
         }
 
-        $cn = $this->dbConnection();
         $targetFields = array();
         $properties = array('login', 'password', 'status', 'email', 'create_date');
         $daoProperties = $dao->getProperties();
@@ -223,7 +223,7 @@ class jcommunityModuleInstaller extends jInstallerModule {
             $sourceFields[] = "'".date('Y-m-d H:i:s')."'";
         }
 
-        $sql = "INSERT INTO ".$cn->prefixTable($tableProp['realname']);
+        $sql = "INSERT INTO ".$tableProp['realname'];
         $sql .= '('.implode(',', $targetFields).')';
         $sql .= ' SELECT '.implode(',', $sourceFields) . ' FROM '.$cn->prefixTable('jlx_user');
         $cn->exec($sql);
@@ -239,7 +239,7 @@ class jcommunityModuleInstaller extends jInstallerModule {
         if (isset($daoProperties['status'])) {
             $statusField = $cn->encloseName($daoProperties['status']['fieldName']);
 
-            $sql = "UPDATE ".$cn->prefixTable($tableProp['realname']).
+            $sql = "UPDATE ".$tableProp['realname'].
                 " SET ".$statusField." = ".\Jelix\JCommunity\Account::STATUS_VALID.
                 " WHERE ".$statusField." IS NULL";
             $cn->exec($sql);
@@ -249,7 +249,7 @@ class jcommunityModuleInstaller extends jInstallerModule {
             $loginField = $cn->encloseName($daoProperties['login']['fieldName']);
             $nicknameField = $cn->encloseName($daoProperties['nickname']['fieldName']);
 
-            $sql = "UPDATE ".$cn->prefixTable($tableProp['realname']).
+            $sql = "UPDATE ".$tableProp['realname'].
                 " SET ".$nicknameField." = ".$loginField.
                 " WHERE ".$nicknameField." IS NULL or ".$nicknameField." = ''";
             $cn->exec($sql);
