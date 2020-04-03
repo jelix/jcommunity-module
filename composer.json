@@ -20,7 +20,7 @@
     "extra": {
         "jelix" : {
             "modules-dir": [
-                "src/modules"
+                "modules"
             ]
         },
         "branch-alias": {
