@@ -1,7 +1,18 @@
+Version 1.3.2
+=============
+
+- Fix issue during login:out when enable_after_logout_override is off
+- Fix path to modules in composer.json, for Jelix Composer plugin
+
+Version 1.3.1
+=============
+
+- Fix installer when a table prefix is used
+- Fix installer when the dao for users is overloaded
 
 
-Version 1.3
-===========
+Version 1.3.0
+=============
  
 - **New features to reset password** from the jauthdb_admin module
    - New `resetAdminPasswordEnabled` configuration parameter.
