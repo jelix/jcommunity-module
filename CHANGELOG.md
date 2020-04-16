@@ -1,3 +1,8 @@
+Version 1.3.3
+=============
+
+- Fix compatibility with jauth drivers similar to the db driver
+
 Version 1.3.2
 =============
 
