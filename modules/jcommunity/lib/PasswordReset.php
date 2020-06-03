@@ -60,7 +60,6 @@ class PasswordReset {
         }
         $user->request_date = date('Y-m-d H:i:s');
         $user->keyactivate = ($this->byAdmin?'A:':'U:').$key;
-        \jAuth::updateUser($user);
 
         $domain = \jApp::coord()->request->getDomainName();
         $mail = new \jMailer();
@@ -84,7 +83,15 @@ class PasswordReset {
 
         $body = $tpl->fetchFromString(\jLocale::get($this->tplLocaleId), 'html');
         $mail->msgHTML($body, '', array($mail, 'html2textKeepLinkSafe'));
-        $mail->Send();
+        try {
+            $mail->Send();
+        }
+        catch(\phpmailerException $e) {
+            \jLog::logEx($e, 'error');
+            return self::RESET_MAIL_SERVER_ERROR;
+        }
+
+        \jAuth::updateUser($user);
 
         return self::RESET_OK;
     }
@@ -96,6 +103,7 @@ class PasswordReset {
     const RESET_BAD_KEY = "badkey";
     const RESET_EXPIRED_KEY = "expiredkey";
     const RESET_BAD_STATUS = "badstatus";
+    const RESET_MAIL_SERVER_ERROR = "smtperror";
 
     /**
      * @param string $login
