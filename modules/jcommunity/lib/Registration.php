@@ -46,10 +46,10 @@ class Registration
             $user->status = Account::STATUS_NEW;
             $user->request_date = date('Y-m-d H:i:s');
             $user->keyactivate = 'A:'.$key;
-            \jAuth::updateUser($user);
             $this->sendRegistrationMail($user,
                 'jcommunity~mail.registration.admin.body.html',
                 'jcommunity~password_confirm_registration:resetform');
+            \jAuth::updateUser($user);
         }
     }
 
@@ -61,10 +61,10 @@ class Registration
      */
     public function createAccount($user)
     {
-        \jAuth::saveNewUser($user);
         $this->sendRegistrationMail($user,
             'jcommunity~mail.registration.body.html',
             'jcommunity~registration:confirm');
+        \jAuth::saveNewUser($user);
     }
 
     public function resendRegistrationMail($user)
@@ -74,18 +74,17 @@ class Registration
         $user->request_date = date('Y-m-d H:i:s');
         if (preg_match('/^([AU]):/', $user->keyactivate , $m) && $m[1] == 'A') {
             $user->keyactivate = 'A:'.$key;
-            \jAuth::updateUser($user);
             $this->sendRegistrationMail($user,
                 'jcommunity~mail.registration.admin.body.html',
                 'jcommunity~password_confirm_registration:resetform');
         }
         else {
             $user->keyactivate = 'U:'.$key;
-            \jAuth::updateUser($user);
             $this->sendRegistrationMail($user,
                 'jcommunity~mail.registration.body.html',
                 'jcommunity~registration:confirm');
         }
+        \jAuth::updateUser($user);
     }
 
 
