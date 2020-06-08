@@ -1,3 +1,13 @@
+Version 1.3.4
+=============
+
+- Fix upgraders, when some entrypoints have no auth plugin
+- Fix error into password reset controller when no form submitted
+- Show an error page when the mail sending to reset password has failed
+- Show mail error during registration
+- Fix: show domain+base path in mail
+
+
 Version 1.3.3
 =============
 
