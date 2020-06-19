@@ -29,6 +29,8 @@ RUN apk --no-cache add git php7 php7-fpm \
     php7-phar \
     php7-gettext \
     php7-ctype \
+    php7-pgsql \
+    php7-mysqli \
     openssl \
     wget
 

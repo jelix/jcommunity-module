@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 services:
   web:
     image: nginx:alpine
@@ -10,7 +10,41 @@ services:
     ports:
       - "8024:80"
   php:
-    build: ./docker-conf/phpfpm
+    build:
+      context: ./docker-conf/phpfpm
+      args:
+        - FPM_USER_ID
+        - FPM_GROUP_ID
     container_name: jcommunity_php
     volumes:
       - "../:/jelixapp/"
+    depends_on:
+      - pgsql
+      - mysql
+  pgsql:
+    image: mdillon/postgis:11
+    container_name: jcommunity_test_pgsql
+    restart: always
+    environment:
+      POSTGRES_DB: jcommunity
+      POSTGRES_PASSWORD: test1234
+      POSTGRES_USER: usertest
+    volumes:
+      - pg_data:/var/lib/postgresql
+    ports:
+      - "8548:5432"
+  mysql:
+    image: mysql
+    container_name: jcommunity_test_mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mysqlpass
+      MYSQL_DATABASE: jcommunity
+      MYSQL_USER: usertest
+      MYSQL_PASSWORD: test1234
+    ports:
+      - "8549:3306"
+volumes:
+  pg_data:
+    name: jcommunity_pg_data

@@ -21,6 +21,8 @@ Current version works only with Jelix 1.6.19+ and 1.7.
 
 See INSTALL.md or [the wiki](https://github.com/jelix/jcommunity-module/wiki/installation)
 
+To contribute and test, read the test/README.md file.
+
 Others documentation
 ---------------------
 

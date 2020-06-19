@@ -1,13 +1,14 @@
 ;<?php die(''); ?>
 ;for security reasons, don't remove or modify the first line
-[jdb]
 
-; name of the default profil to use for any connection
+[jdb]
 default=test
 
 [jdb:test]
-driver="sqlite3"
-database="var:db/jcommunity.sqlite"
+driver=pgsql
+host=pgsql
+database=jcommunity
+user=usertest
+password="test1234"
 persistent= on
 force_encoding = on
-

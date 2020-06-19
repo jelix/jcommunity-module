@@ -38,9 +38,16 @@ function resetApp() {
         chown $APP_USER:$APP_GROUP $APPDIR/var/log
     fi
 
-    if [ -f $APPDIR/var/config/profiles.ini.php.dist ]; then
-        cp $APPDIR/var/config/profiles.ini.php.dist $APPDIR/var/config/profiles.ini.php
+    if [ "$1" == "sqlite" ]; then
+      cp $APPDIR/docker-conf/phpfpm/profiles-sqlite.ini.php $APPDIR/var/config/profiles.ini.php
+    else
+       if [ "$1" == "mysql" ]; then
+          cp $APPDIR/docker-conf/phpfpm/profiles-mysql.ini.php $APPDIR/var/config/profiles.ini.php
+       else
+          cp $APPDIR/docker-conf/phpfpm/profiles.ini.php $APPDIR/var/config/profiles.ini.php
+      fi
     fi
+
     if [ -f $APPDIR/var/config/localconfig.ini.php.dist ]; then
         cp $APPDIR/var/config/localconfig.ini.php.dist $APPDIR/var/config/localconfig.ini.php
     fi
@@ -60,6 +67,8 @@ function resetApp() {
     touch $APPDIR/var/db/.dummy && chown $APP_USER:$APP_GROUP $APPDIR/var/db/.dummy
     touch $APPDIR/var/mails/.dummy && chown $APP_USER:$APP_GROUP $APPDIR/var/mails/.dummy
     touch $APPDIR/var/uploads/.dummy && chown $APP_USER:$APP_GROUP $APPDIR/var/uploads/.dummy
+
+    php $APPDIR/docker-conf/phpfpm/resetdb.php
 
     cleanTmp
     setRights
@@ -129,7 +138,11 @@ case $COMMAND in
     clean_tmp)
         cleanTmp;;
     reset)
-        resetApp;;
+        resetApp pgsql;;
+    reset-mysql)
+        resetApp mysql;;
+    reset-sqlite)
+        resetApp sqlite;;
     launch)
         launch;;
     install)

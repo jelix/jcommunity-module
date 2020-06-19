@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+COMMAND="$1"
+shift
+
+if [ "$COMMAND" == "" ]; then
+    echo "Error: command is missing"
+    echo "Possible commands: clean-tmp, reset, install, rights, composer-install, composer-update"
+    echo " shell, shellroot"
+    exit 1;
+fi
+
+case $COMMAND in
+    clean-tmp)
+        docker exec -t -i jcommunity_php appctl.sh clean_tmp;;
+    reset)
+        docker exec -t -i jcommunity_php appctl.sh reset;;
+    reset-mysql)
+        docker exec -t -i jcommunity_php appctl.sh reset-mysql;;
+    reset-sqlite)
+        docker exec -t -i jcommunity_php appctl.sh reset-sqlite;;
+    install)
+        docker exec -t -i jcommunity_php appctl.sh install;;
+    rights)
+        docker exec -t -i jcommunity_php appctl.sh rights;;
+    composer-install)
+        docker exec -t -i jcommunity_php appctl.sh composer_install;;
+    composer-update)
+        docker exec -t -i jcommunity_php appctl.sh composer_update;;
+    #unittests)
+    #    docker exec -t -i jcommunity_php appctl.sh unittests;;
+    pgsql)
+       docker exec -it --user postgres -e PGPASSWORD="test1234" jcommunity_test_pgsql psql --username=usertest jcommunity
+       ;;
+    mysql)
+      docker exec -it jcommunity_test_mysql mysql -u usertest -ptest1234 jcommunity
+      ;;
+    shell)
+       docker exec -it --user usertest jcommunity_php  /bin/sh -l;;
+    shellroot)
+       docker exec -it jcommunity_php  /bin/sh  -l;;
+    *)
+        echo "wrong command"
+        exit 2
+        ;;
+esac
+
+
