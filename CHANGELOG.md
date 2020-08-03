@@ -1,3 +1,13 @@
+Version 1.3.5
+=============
+
+- Fix SQL errors during installation, especially with Postgresql
+- Fix bad config variable name: `resetPasswordAdminEnabled` must be `resetAdminPasswordEnabled`
+- Fix configuration reading
+- Fix display of reset password links in user profile. Buttons to reset passwords 
+  should not be shown if password change is not possible.
+
+
 Version 1.3.4
 =============
 
