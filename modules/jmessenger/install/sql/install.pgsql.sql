@@ -1,4 +1,4 @@
-CREATE TABLE %%PREFIX%%jmessenger (
+CREATE TABLE IF NOT EXISTS %%PREFIX%%jmessenger (
     id serial NOT NULL,
     id_from integer DEFAULT 0 NOT NULL,
     id_for integer DEFAULT 0 NOT NULL,

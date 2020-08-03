@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS %%PREFIX%%community_users (
     request_date timestamp without time zone,
     create_date timestamp without time zone NOT NULL,
     CONSTRAINT %%PREFIX%%community_users_id_pk PRIMARY KEY (id),
-    CONSTRAINT %%PREFIX%%community_users_login_key UNIQUE KEY (login)
+    CONSTRAINT %%PREFIX%%community_users_login_key UNIQUE (login)
 );
