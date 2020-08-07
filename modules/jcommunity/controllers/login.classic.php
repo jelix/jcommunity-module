@@ -54,7 +54,7 @@ class loginCtrl extends jController {
             $form->setErrorOn('auth_login', jLocale::get('jcommunity~login.error'));
             //jMessage::add(jLocale::get('jcommunity~login.error'), 'error');
             $auth_url_return = $this->param('auth_url_return');
-            if ($auth_url_return) {
+            if (method_exists('jAuth', 'checkReturnUrl') &&  jAuth::checkReturnUrl($auth_url_return)) {
                 $rep->url = jUrl::get('login:index', array('auth_url_return'=>$auth_url_return));
             } else {
                 $rep->url = jUrl::get('login:index');
