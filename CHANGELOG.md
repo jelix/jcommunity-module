@@ -1,3 +1,12 @@
+Version 1.3.6
+=============
+
+- Fix: Check the url to return to, to redirect only to the web site.
+- Fix: Profiles page should not be able to be viewed if no rights.
+  List of users could be guessed by brut force on the url of
+  profile `index.php/users/<login>`
+- Fix installer: if nothing can be migrated, default user should be installed
+
 Version 1.3.5
 =============
 
