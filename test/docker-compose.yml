@@ -24,7 +24,6 @@ services:
   pgsql:
     image: mdillon/postgis:11
     container_name: jcommunity_test_pgsql
-    restart: always
     environment:
       POSTGRES_DB: jcommunity
       POSTGRES_PASSWORD: test1234
@@ -37,7 +36,6 @@ services:
     image: mysql
     container_name: jcommunity_test_mysql
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: mysqlpass
       MYSQL_DATABASE: jcommunity
