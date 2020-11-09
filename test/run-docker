@@ -16,4 +16,17 @@ fi
 #    exit 0
 #fi
 
+if [ "$JCOMMUNITY_WEB_PORT" == "" ]; then
+  export JCOMMUNITY_WEB_PORT=8024
+fi
+
+
+if [ "$JCOMMUNITY_MYSQL_PORT" == "" ]; then
+  export JCOMMUNITY_MYSQL_PORT=8549
+fi
+
+if [ "$JCOMMUNITY_PGSQL_PORT" == "" ]; then
+  export JCOMMUNITY_PGSQL_PORT=8548
+fi
+
 docker-compose -p jelix-jcommunity-tests $CMD
