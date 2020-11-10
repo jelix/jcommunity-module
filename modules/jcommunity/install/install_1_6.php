@@ -288,6 +288,9 @@ class jcommunityModuleInstaller extends jInstallerModule {
         foreach($usersToInsert as $userData) {
             $user = $dao->getByLogin($userData['login']);
             if (!$user) {
+                if (isset($userData['password'])) {
+                    $userData['password'] = $this->parsePassword($userData['password'], $userData['login'], $driver);
+                }
                 if (isset($userData['_clear_password_to_be_encrypted'])) {
                     if (!isset($userData['password'])) {
                         $userData['password'] = $driver->cryptPassword($userData['_clear_password_to_be_encrypted']);
@@ -301,5 +304,39 @@ class jcommunityModuleInstaller extends jInstallerModule {
                 $dao->insert($user);
             }
         }
+    }
+
+    
+    /**
+     * Parse the password field value.
+     * 
+     * @param string $password The password field value ('__empty', '__to_encrypt:`password`', '__random' or the encrypted password)
+     * @param string $login The login of the user being configured
+     * @param dbAuthDriver $driver The database driver
+     * 
+     * @return string The password value to put in the db
+     */
+    protected function parsePassword($password, $login, $driver)
+    {
+        if (strncmp('__', $password, 2)) {
+            return $password;
+        }
+
+        if ($password === '__empty') {
+            return '';
+        }
+
+        if ($password === '__random') {
+            $randomPass = \jAuth::getRandomPassword();
+            echo 'Password for user '.$login.': '.$randomPass.PHP_EOL;
+            return $driver->cryptPassword($randomPass);
+        }
+
+        $matches = array();
+        if (preg_match('/__to_encrypt:(.*)/', $password, $matches)) {
+            return $driver->cryptPassword($matches[1]);
+        }
+
+        return null;
     }
 }
