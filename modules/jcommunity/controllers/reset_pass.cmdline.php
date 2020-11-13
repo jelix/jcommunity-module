@@ -7,6 +7,7 @@ class reset_passCtrl extends jControllerCmdLine {
     protected $allowed_options = array(
         'change' => array(
             '--force' => false,
+            '-v' => false,
         ),
     );
 
@@ -14,6 +15,9 @@ class reset_passCtrl extends jControllerCmdLine {
         'change' => array(
             'login' => true,
             'password' => false
+        ),
+        'reset' => array(
+            'login' => true,
         )
     );
 
@@ -21,6 +25,7 @@ class reset_passCtrl extends jControllerCmdLine {
         parent::__construct($request);
         $this->help = array(
             'change' => jLocale::get('password.change.cmdline.help').PHP_EOL,
+            'reset' => jLocale::get('password.reset.cmdline.help').PHP_EOL,
         );
     }
 
@@ -31,25 +36,32 @@ class reset_passCtrl extends jControllerCmdLine {
         $force = $this->option('--force');
         $login = $this->param('login');
         $password = $this->param('password');
+        $verbose = $this->option('-v');
 
         $userInfos = jAuth::getUser($login);
 
         if (!$userInfos) {
-            $rep->addContent(jLocale::get('password.change.cmdline.error.unknown').PHP_EOL);
+            if ($verbose) {
+                $rep->addContent(jLocale::get('password.change.cmdline.error.unknown').PHP_EOL);
+            }
             $rep->setExitCode(1);
 
             return $rep;
         }
 
         if (preg_match('/!!.*!!/', $userInfos->password)) {
-            $rep->addContent(jLocale::get('password.change.cmdline.error.module').PHP_EOL);
+            if ($verbose) {
+                $rep->addContent(jLocale::get('password.change.cmdline.error.module').PHP_EOL);
+            }
             $rep->setExitCode(1);
 
             return $rep;
         }
 
         if (!$force && !empty($userInfos->password)) {
-            $rep->addContent(jLocale::get('password.change.cmdline.error.defined').PHP_EOL);
+            if ($verbose) {
+                $rep->addContent(jLocale::get('password.change.cmdline.error.defined').PHP_EOL);
+            }
             $rep->setExitCode(1);
 
             return $rep;
@@ -60,15 +72,58 @@ class reset_passCtrl extends jControllerCmdLine {
         }
 
         if (jAuth::changePassword($login, $password)) {
-            $rep->addContent(jLocale::get('password.change.cmdline.success').PHP_EOL);
+            if ($verbose) {
+                $rep->addContent(jLocale::get('password.change.cmdline.success').PHP_EOL);
+            }
             $rep->addContent($login.': '.$password.PHP_EOL);
             $rep->setExitCode(0);
 
             return $rep;
         }
 
-        $rep->addContent(jLocale::get('password.change.cmdline.error.change').PHP_EOL);
+        if ($verbose) {
+            $rep->addContent(jLocale::get('password.change.cmdline.error.change').PHP_EOL);
+        }
         $rep->setExitCode(1);
+
+        return $rep;
+    }
+
+    public function reset()
+    {
+        $rep = $this->getResponse();
+        $login = $this->param('login');
+        $userInfos = jAuth::getUser($login);
+        
+        if (!$userInfos) {
+            $rep->addContent(jLocale::get('password.change.cmdline.error.unknown').PHP_EOL);
+            $rep->setExitCode(1);
+
+            return $rep;
+        }
+
+        if (!$userInfos->email) {
+            $rep->addContent(jLocale::get('password.reset.cmdline.mail.undefined').PHP_EOL);
+            $rep->setExitCode(1);
+
+            return $rep;
+        }
+
+        if ($userInfos->status == \Jelix\JCommunity\Account::STATUS_VALID
+            || $userInfos->status == \Jelix\JCommunity\Account::STATUS_PWD_CHANGED) {
+            $passReset = new \Jelix\JCommunity\PasswordReset(true, true);
+            $result = $passReset->sendEmail($login, $userInfos->email);
+        }
+        else {
+            $result = \Jelix\JCommunity\PasswordReset::RESET_BAD_STATUS;
+        }
+
+        if ($result != \Jelix\JCommunity\PasswordReset::RESET_OK) {
+            $rep->addContent(jLocale::get('password.reset.cmdline.error'));
+            $rep->setExitCode(1);
+
+            return $rep;
+        }
 
         return $rep;
     }

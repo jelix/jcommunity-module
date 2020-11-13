@@ -8,7 +8,4 @@
         <copyright>2005-2015 Laurent Jouanneau and other contributors</copyright>
         <creator name="Laurent Jouanneau" email="laurent@jelix.org" active="true"/>
     </info>
-    <entrypoints>
-        <entry file="cmdline.php" config="cmdline/config.ini.php" type="cmdline"/>
-    </entrypoints>
 </project>
