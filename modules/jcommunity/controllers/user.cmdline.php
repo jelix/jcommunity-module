@@ -12,7 +12,7 @@ class userCtrl extends jControllerCmdLine {
         'create' => array(
             '--reset' => false,
             '--admin' => false,
-            '-v'
+            '-v' => false,
         )
     );
 
@@ -36,6 +36,7 @@ class userCtrl extends jControllerCmdLine {
         $this->help = array(
             'changePassword' => jLocale::get('password.change.cmdline.help').PHP_EOL,
             'resetPassword' => jLocale::get('password.reset.cmdline.help').PHP_EOL,
+            'create' => jLocale::get('register.cmdline.create.help').PHP_EOL
         );
     }
 
@@ -126,5 +127,64 @@ class userCtrl extends jControllerCmdLine {
         }
 
         return $this->exit($rep, $code, $message);
+    }
+
+    public function create()
+    {
+        $rep = $this->getResponse();
+
+        $login = $this->param('login');
+        $email = $this->param('email');
+        $password = $this->param('password');
+        $reset = $this->option('--reset');
+        $admin = $this->option('--admin');
+        $verbose = $this->option('-v');
+        $code = 0;
+        $message = '';
+
+        $user = jAuth::getUser($login);
+
+        if ($user) {
+            $message = jLocale::get('register.form.login.exists').PHP_EOL;
+            $code = 1;
+        }
+
+        if (!$code && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $message = jLocale::get('register.email.bad.format').PHP_EOL;
+            $code = 1;
+        }
+
+        if ($code) {
+            return $this->exit($rep, $code, $message, $verbose);
+        }
+
+        if (!$password) {
+            if ($reset) {
+                $password = '';
+            } else {
+                $password = jAuth::getRandomPassword();
+                $rep->addContent($login.': '.$password.PHP_EOL);
+            }
+        }
+
+        $user = jAuth::createUserObject($login, $password);
+        $user->email = $email;
+        $user->status = \Jelix\JCommunity\Account::STATUS_VALID;
+        jAuth::saveNewUser($user);
+        if ($admin) {
+            jAcl2DbUserGroup::addUserToGroup($login, 'admins');
+        }
+        $message = jLocale::get('register.registration.cmdline.ok').PHP_EOL;
+
+        if ($reset) {
+            $passReset = new \Jelix\JCommunity\PasswordReset(true, true);
+            $result = $passReset->sendEmail($login, $user->email);
+            if ($result != \Jelix\JCommunity\PasswordReset::RESET_OK) {
+                $message = $message.jLocale::get('password.reset.cmdline.error').PHP_EOL;
+                $code = 1;
+            }
+        }
+
+        return $this->exit($rep, $code, $message, $verbose);
     }
 }
