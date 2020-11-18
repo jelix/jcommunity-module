@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * @author      Adrien Lagroy de Croutte
+ * @copyright   2020 Adrien Lagroy de Croutte
+ *
+ * @link         https://jelix.org
+ * @licence      http://www.gnu.org/licenses/gpl.html GNU General Public Licence, see LICENCE file
+ */
 class userCtrl extends jControllerCmdLine {
 
     public $help = array();
@@ -34,15 +40,28 @@ class userCtrl extends jControllerCmdLine {
     public function __construct($request) {
         parent::__construct($request);
         $this->help = array(
-            'changePassword' => jLocale::get('password.change.cmdline.help').PHP_EOL,
-            'resetPassword' => jLocale::get('password.reset.cmdline.help').PHP_EOL,
-            'create' => jLocale::get('register.cmdline.create.help').PHP_EOL
+            'changePassword' => jLocale::get('jcommunity~password.change.cmdline.help').PHP_EOL,
+            'resetPassword' => jLocale::get('jcommunity~password.reset.cmdline.help').PHP_EOL,
+            'create' =>
+                \jLocale::get('jcommunity~register.cmdline.create.help.usage').PHP_EOL.
+                PHP_EOL.
+                \jLocale::get('jcommunity~register.cmdline.create.help.description').PHP_EOL.
+                PHP_EOL.
+                \jLocale::get('jcommunity~register.cmdline.create.help.text').PHP_EOL.
+                PHP_EOL.
+                "  -v:      ".jLocale::get('jcommunity~register.cmdline.create.help.option.verbose').PHP_EOL.
+                "  --admin: ".jLocale::get('jcommunity~register.cmdline.create.help.option.admin').PHP_EOL.
+                "  --reset: ".jLocale::get('jcommunity~register.cmdline.create.help.option.reset').PHP_EOL.
+                "  login:   ".jLocale::get('jcommunity~register.cmdline.create.help.parameter.login').PHP_EOL.
+                "  email:   ".jLocale::get('jcommunity~register.cmdline.create.help.parameter.email').PHP_EOL.
+                "  password: ".jLocale::get('jcommunity~register.cmdline.create.help.parameter.password').PHP_EOL.
+                PHP_EOL
         );
     }
 
     protected function exit($rep, $code, $message = null, $verbose = true)
     {
-        if ($verbose && $message) {
+        if (($verbose || $code !=0) && $message) {
             $rep->addContent($message);
         }
         $rep->setExitCode($code);
