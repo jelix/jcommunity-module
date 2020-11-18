@@ -225,11 +225,15 @@ class jcommunityModuleInstaller extends \Jelix\Installer\Module\Installer {
 
         $file = $path.'install/'.$relativeSourcePath;
         $usersToInsert = json_decode(file_get_contents($file), true);
-        if (!$usersToInsert) {
+        if ($usersToInsert === null) {
             throw new Exception("jCommunity install: Bad format for users data file $relativeSourcePath.");
         }
         if (is_object($usersToInsert)) {
             $usersToInsert = array($usersToInsert);
+        }
+
+        if (empty($usersToInsert)) {
+            return ;
         }
 
         $dao = jDao::get($daoSelector, $dbProfile);
