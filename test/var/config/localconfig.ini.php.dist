@@ -1,5 +1,6 @@
 
 forceHTTPPort=8024
+domainName=jcommunity.local
 
 [jcommunity]
 ;loginResponse = html

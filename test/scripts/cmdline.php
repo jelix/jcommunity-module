@@ -1,6 +1,6 @@
 <?php
 
-require_once ('../application.init.php');
+require_once (__DIR__.'/../application.init.php');
 require_once (JELIX_LIB_CORE_PATH.'jCmdlineCoordinator.class.php');
 require_once (JELIX_LIB_CORE_PATH.'request/jCmdLineRequest.class.php');
 
