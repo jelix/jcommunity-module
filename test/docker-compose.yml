@@ -24,7 +24,7 @@ services:
       - pgsql
       - mysql
   pgsql:
-    image: mdillon/postgis:11
+    image: postgres:11
     container_name: jcommunity_test_pgsql
     environment:
       POSTGRES_DB: jcommunity

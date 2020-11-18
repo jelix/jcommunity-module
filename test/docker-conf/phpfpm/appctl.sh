@@ -129,7 +129,6 @@ function launch() {
       composerInstall
     fi
 
-    launchInstaller
     setRights
     cleanTmp
 }
