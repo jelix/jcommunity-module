@@ -59,9 +59,9 @@ class userCtrl extends jControllerCmdLine {
         );
     }
 
-    protected function exit($rep, $code, $message = null, $verbose = true)
+    protected function exitMessage($rep, $code, $message = null, $verbose = true)
     {
-        if (($verbose || $code !=0) && $message) {
+        if (($verbose || $code != 0 ) && $message) {
             $rep->addContent($message);
         }
         $rep->setExitCode($code);
@@ -100,16 +100,22 @@ class userCtrl extends jControllerCmdLine {
             $password = jAuth::getRandomPassword();
         }
 
-        if (!$code && jAuth::changePassword($login, $password)) {
-            $rep->addContent($login.': '.$password.PHP_EOL);
-            $message = jLocale::get('password.change.cmdline.success').PHP_EOL;
-            $code = 0;
-        } else {
-            $message = jLocale::get('password.change.cmdline.error.change').PHP_EOL;
-            $code = 1;
+        if (!$code) {
+            if (jAuth::changePassword($login, $password)) {
+                $rep->addContent($login . ': ' . $password . PHP_EOL);
+                $message = jLocale::get(
+                        'password.change.cmdline.success'
+                    ) . PHP_EOL;
+                $code    = 0;
+            } else {
+                $message = jLocale::get(
+                        'password.change.cmdline.error.change'
+                    ) . PHP_EOL;
+                $code    = 1;
+            }
         }
 
-        return $this->exit($rep, $message, $code, $verbose);
+        return $this->exitMessage($rep, $message, $code, $verbose);
     }
 
     public function resetPassword()
@@ -145,7 +151,7 @@ class userCtrl extends jControllerCmdLine {
             $code = 1;
         }
 
-        return $this->exit($rep, $code, $message);
+        return $this->exitMessage($rep, $code, $message);
     }
 
     public function create()
@@ -204,6 +210,6 @@ class userCtrl extends jControllerCmdLine {
             }
         }
 
-        return $this->exit($rep, $code, $message, $verbose);
+        return $this->exitMessage($rep, $code, $message, $verbose);
     }
 }
