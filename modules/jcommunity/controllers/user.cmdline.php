@@ -40,8 +40,15 @@ class userCtrl extends jControllerCmdLine {
     public function __construct($request) {
         parent::__construct($request);
         $this->help = array(
-            'changePassword' => jLocale::get('jcommunity~password.change.cmdline.help').PHP_EOL,
-            'resetPassword' => jLocale::get('jcommunity~password.reset.cmdline.help').PHP_EOL,
+            'changePassword' => jLocale::get('jcommunity~password.change.cmdline.help.usage').PHP_EOL.PHP_EOL.
+                jLocale::get('jcommunity~password.change.cmdline.help.description').PHP_EOL.PHP_EOL.
+                jLocale::get('jcommunity~password.change.cmdline.help.text').PHP_EOL.PHP_EOL.
+                "  --force:  ".jLocale::get('jcommunity~password.change.cmdline.help.option.force').PHP_EOL.
+                "  login:    ".jLocale::get('jcommunity~password.change.cmdline.help.parameter.login').PHP_EOL.
+                "  password: ".jLocale::get('jcommunity~password.change.cmdline.help.parameter.password'),
+            'resetPassword' => jLocale::get('jcommunity~password.reset.cmdline.help.usage').PHP_EOL.PHP_EOL.
+                jLocale::get('jcommunity~password.reset.cmdline.help.description').PHP_EOL.PHP_EOL.
+                "  login:    ".jLocale::get('jcommunity~password.reset.cmdline.help.parameter.login'),
             'create' =>
                 \jLocale::get('jcommunity~register.cmdline.create.help.usage').PHP_EOL.
                 PHP_EOL.
