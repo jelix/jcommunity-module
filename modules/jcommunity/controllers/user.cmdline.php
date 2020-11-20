@@ -19,6 +19,7 @@ class userCtrl extends jControllerCmdLine {
             '--reset' => false,
             '--admin' => false,
             '-v' => false,
+            '--no-error-if-exists' => false
         )
     );
 
@@ -164,6 +165,7 @@ class userCtrl extends jControllerCmdLine {
         $reset = $this->option('--reset');
         $admin = $this->option('--admin');
         $verbose = $this->option('-v');
+        $error = $this->option('--no-error-if-exists');
         $code = 0;
         $message = '';
 
@@ -179,8 +181,8 @@ class userCtrl extends jControllerCmdLine {
             $code = 1;
         }
 
-        if ($code) {
-            return $this->exit($rep, $code, $message, $verbose);
+        if ($code) {            
+                return $this->exit($rep, $error ? 0 : $code, $message, $verbose);
         }
 
         if (!$password) {
