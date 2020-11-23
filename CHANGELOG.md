@@ -1,3 +1,31 @@
+Version 1.3.7
+=============
+  
+Fix the installer: the json file containing default users can be empty.
+
+New command line scripts for administrator:
+
+- to send a mail to a user with a password reset link
+- to change the password of a user
+- to create a user.
+
+```bash
+
+# for Jelix 1.6
+
+php scripts/cmdline.php jcommunity~user:changePassword [--force] <login> [<password>]
+php scripts/cmdline.php jcommunity~user:resetPassword <login>
+php scripts/cmdline.php jcommunity~user:create [--reset] [--admin] [--no-error-if-exist] <login> <email> [<password>]
+
+# for Jelix 1.7
+
+php console.php jcommunity:password:change [--force] <login> [<password>]
+php console.php jcommunity:password:reset <login>
+php console.php jcommunity:user:create [--reset] [--admin] [--no-error-if-exist] <login> <email> [<password>]
+```
+
+
+
 Version 1.3.6
 =============
 
