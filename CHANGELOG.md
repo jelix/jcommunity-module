@@ -1,3 +1,12 @@
+Version 1.3.8
+=============
+
+- fix authentification: when going to the login form as an authenticated user,
+  the user should be redirected directly to a page when possible, instead of 
+  displaying a message.
+  
+
+
 Version 1.3.7
 =============
   
