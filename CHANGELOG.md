@@ -1,3 +1,8 @@
+Version 1.3.9
+=============
+
+- fix a bad method name into the command to create a user
+
 Version 1.3.8
 =============
 
