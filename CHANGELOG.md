@@ -1,3 +1,12 @@
+
+Version 1.3.10
+=============
+
+- adds a configuration parameter `noRedirectionOnAuthenticatedLoginPage` in 
+  the `jcommunity` section, to disable the new behavior of the login page 
+  introduced in 1.3.8. Set `noRedirectionOnAuthenticatedLoginPage=on` to disable
+  it.
+  
 Version 1.3.9
 =============
 

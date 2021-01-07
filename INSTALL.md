@@ -179,6 +179,9 @@ You should add a `jcommunity` section, and you can set these parameters:
 - `publicProperties`: it indicates the list of users properties that can be shown
    to any other users, when his profile is shown. By default, only the login,
    the nickname and the creation date are shown.
+- `noRedirectionOnAuthenticatedLoginPage`: set it to true if you don't want
+   a redirection when the user goes on the login page whereas he is authenticated.
+   
 
 ex:
 
