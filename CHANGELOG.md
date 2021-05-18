@@ -1,6 +1,11 @@
 
+Version 1.3.11
+==============
+
+- Fix registration: new login should be trimmed before saving it into the database
+
 Version 1.3.10
-=============
+==============
 
 - adds a configuration parameter `noRedirectionOnAuthenticatedLoginPage` in 
   the `jcommunity` section, to disable the new behavior of the login page 
