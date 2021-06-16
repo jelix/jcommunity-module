@@ -1,8 +1,8 @@
 Version 1.3.12
 ==============
 
-
-New command line script for administrator to delete an account:
+* Fix links in mails for registration or password reset
+* New command line script for administrator to delete an account:
 ```bash
 
 # for Jelix 1.6
