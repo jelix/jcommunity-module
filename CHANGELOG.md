@@ -1,3 +1,19 @@
+Version 1.3.12
+==============
+
+
+New command line script for administrator to delete an account:
+```bash
+
+# for Jelix 1.6
+
+php scripts/cmdline.php jcommunity~user:delete <login>
+
+# for Jelix 1.7
+
+php console.php jcommunity:user:delete <login>
+```
+
 
 Version 1.3.11
 ==============
