@@ -23,6 +23,15 @@ See INSTALL.md or [the wiki](https://github.com/jelix/jcommunity-module/wiki/ins
 
 To contribute and test, read the test/README.md file.
 
+Localization
+------------
+
+To help to translate the module, go to Transifex: https://www.transifex.com/3liz-1/jelix/modules--jcommunitypot/.
+No PR for localization will be accepted.
+
+To download locales, go to https://download.jelix.org/jelix/langpacks/jcommunity/ . 
+
+
 Others documentation
 ---------------------
 
