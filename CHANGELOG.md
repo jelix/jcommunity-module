@@ -1,3 +1,13 @@
+Version 1.3.13
+==============
+
+- Add hook on login form for other auth module. These hooks allow to other modules to add content into the
+  login form. See login.tpl
+- Fix error display when mailer sent at registration_admin_resend
+- Fix links in email for registration, sent by an admin
+- Locales for many languages are now available at https://download.jelix.org/jelix/langpacks/jcommunity/
+
+
 Version 1.3.12
 ==============
 
