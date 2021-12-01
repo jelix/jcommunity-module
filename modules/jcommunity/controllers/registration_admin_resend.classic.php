@@ -89,7 +89,7 @@ class registration_admin_resendCtrl extends \Jelix\JCommunity\AbstractController
 
         $registration = new \Jelix\JCommunity\Registration();
         try {
-            $registration->resendRegistrationMail($user);
+            $registration->resendRegistrationMail($user, true);
         } catch(\phpmailerException $e) {
             \jLog::logEx($e, 'error');
             $rep = $this->_getjCommunityResponse();
