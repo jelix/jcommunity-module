@@ -7,3 +7,5 @@ release:
     - make deploy
   only:
     - tags
+  tags:
+    - jelix
