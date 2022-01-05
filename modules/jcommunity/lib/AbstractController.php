@@ -17,6 +17,9 @@ class AbstractController extends \jController
 
     protected $responseId = '';
 
+    /**
+     * @var Config
+     */
     protected $config;
 
     public function __construct($request)

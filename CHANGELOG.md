@@ -1,3 +1,11 @@
+Next
+====
+
+- Fix access to administration features like password reset and registration password resending.
+  Controllers should check if jAuth authorize the user to change his password.
+
+
+
 Version 1.3.13
 ==============
 

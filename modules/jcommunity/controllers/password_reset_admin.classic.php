@@ -27,6 +27,21 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
         return null;
     }
 
+    protected function _checkUser($login, $rep)
+    {
+        $user = \jAuth::getUser($login);
+        if (!$user || $user->email == '') {
+            $this->showError($rep, 'no_access_wronguser');
+            return false;
+        }
+
+        if (!jAuth::canChangePassword($login)) {
+            $this->showError($rep, 'no_access_badstatus');
+            return false;
+        }
+
+        return $user;
+    }
 
     /**
      * form to confirm the password reset
@@ -42,9 +57,10 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
         $rep->title = jLocale::get('password.form.title');
 
         $login = $this->param('login');
-        $user = \jAuth::getUser($login);
-        if (!$user || $user->email == '') {
-            return $this->showError($rep, 'no_access_wronguser');
+
+        $user = $this->_checkUser($login, $rep);
+        if ($user === false) {
+            return $rep;
         }
 
         $tpl = new jTpl();
@@ -65,11 +81,12 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
         }
 
         $login = $this->param('pass_login');
-        $user = \jAuth::getUser($login);
-        if (!$user || $user->email == '') {
-            $rep = $this->_getjCommunityResponse();
-            $rep->title = jLocale::get('password.form.title');
-            return $this->showError($rep, 'no_access_wronguser');
+
+        $rep = $this->_getjCommunityResponse();
+        $rep->title = jLocale::get('password.form.title');
+        $user = $this->_checkUser($login, $rep);
+        if ($user === false) {
+            return $rep;
         }
 
         $rep = $this->getResponse('redirect');
