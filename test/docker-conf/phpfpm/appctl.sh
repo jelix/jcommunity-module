@@ -1,7 +1,7 @@
-#!/bin/sh
-APPDIR="/jelixapp/test"
-APP_USER=usertest
-APP_GROUP=grouptest
+#!/bin/bash
+APPDIR="/app/test"
+APP_USER=userphp
+APP_GROUP=groupphp
 
 COMMAND="$1"
 
@@ -101,19 +101,13 @@ function setRights() {
 }
 
 function composerInstall() {
-    if [ -f $APPDIR/composer.lock ]; then
-        rm -f $APPDIR/composer.lock
-    fi
-    composer install --prefer-dist --no-progress --no-ansi --no-interaction --working-dir=$APPDIR
-    chown -R $APP_USER:$APP_GROUP $APPDIR/vendor $APPDIR/composer.lock
+    echo "--- Install Composer packages"
+    /bin/helpers.sh composer-install $APPDIR
 }
 
 function composerUpdate() {
-    if [ -f $APPDIR/composer.lock ]; then
-        rm -f $APPDIR/composer.lock
-    fi
-    composer update --prefer-dist --no-progress --no-ansi --no-interaction --working-dir=$APPDIR
-    chown -R $APP_USER:$APP_GROUP $APPDIR/vendor $APPDIR/composer.lock
+    echo "--- Update Composer packages"
+    /bin/helpers.sh composer-update $APPDIR
 }
 
 function launch() {
