@@ -7,7 +7,7 @@ RUN apt-get update; \
     ; \
     apt-get clean
 
-COPY jcomm_entrypoint.sh /bin/
+COPY jcomm_entrypoint.sh /bin/entrypoint.d/
 COPY appctl.sh /bin/
-RUN chmod 755 /bin/jcomm_entrypoint.sh /bin/appctl.sh
+RUN chmod 755 /bin/entrypoint.d/jcomm_entrypoint.sh /bin/appctl.sh
 
