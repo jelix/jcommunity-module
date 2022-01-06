@@ -67,6 +67,19 @@ class authadmincommunityListener extends jEventListener{
         $this->onjauthdbAdminPrepareUpdate($event);
     }
 
+    protected function createValidationWidget()
+    {
+        $rbuttons = new jFormsControlRadiobuttons('jcommFirstStatus');
+        $rbuttons->label = jLocale::get('jcommunity~account.form.status');
+        $rbuttons->datasource = new jFormsStaticDatasource();
+        $rbuttons->datasource->data = array(
+            'STATUS_NEW' => jLocale::get('jcommunity~account.form.admin.registration.info'),
+            'STATUS_VALID' => jLocale::get('jcommunity~account.form.status.valid'),
+        );
+        return $rbuttons;
+    }
+
+
     function onjauthdbAdminPrepareCreate(jEvent $event)
     {
         $form = $event->form;
@@ -79,11 +92,14 @@ class authadmincommunityListener extends jEventListener{
         if ($config->isResetAdminPasswordEnabledForAdmin()) {
             $form->deactivate('password');
             $form->deactivate('password_confirm');
+            $form->addControl($this->createValidationWidget());
+            $form->setData('jcommFirstStatus', 'STATUS_NEW');
         }
     }
 
     function onjauthdbAdminEditCreate(jEvent $event)
     {
+        /** @var jFormsBase $form */
         $form = $event->form;
         $form->deactivate('status');
         $form->deactivate('create_date');
@@ -94,17 +110,28 @@ class authadmincommunityListener extends jEventListener{
         if ($config->isResetAdminPasswordEnabledForAdmin()) {
             $form->deactivate('password');
             $form->deactivate('password_confirm');
+            $form->addControl($this->createValidationWidget());
             $event->tpl->assign('randomPwd', '');
-            $event->add('<p>'.jLocale::get('jcommunity~account.form.admin.registration.info')."</p>");
         }
 
+    }
+
+    function onjauthdbAdminBeforeCheckCreateForm(jEvent $event)
+    {
+        $config = new \Jelix\JCommunity\Config();
+        if ($config->isResetAdminPasswordEnabledForAdmin()) {
+            $event->form->addControl($this->createValidationWidget());
+        }
     }
 
     function onjauthdbAdminCheckCreateForm(jEvent $event)
     {
         $config = new \Jelix\JCommunity\Config();
         if ($config->isResetAdminPasswordEnabledForAdmin()) {
-            $event->form->setData('status', \Jelix\JCommunity\Account::STATUS_NEW);
+            $firstStatus = $event->form->getData('jcommFirstStatus') == 'STATUS_VALID' ?
+                \Jelix\JCommunity\Account::STATUS_VALID :
+                \Jelix\JCommunity\Account::STATUS_NEW;
+            $event->form->setData('status', $firstStatus);
             $pwd = \jAuth::getRandomPassword();
             $event->form->setData('password', $pwd);
             $event->form->setData('password_confirm', $pwd);
@@ -117,7 +144,8 @@ class authadmincommunityListener extends jEventListener{
     function onjauthdbAdminAfterCreate(jEvent $event)
     {
         $config = new \Jelix\JCommunity\Config();
-        if ($config->isResetAdminPasswordEnabledForAdmin()) {
+        $sendEmail = $event->form->getData('jcommFirstStatus');
+        if ($config->isResetAdminPasswordEnabledForAdmin() && $sendEmail == 'STATUS_NEW') {
             $registration = new \Jelix\JCommunity\Registration();
             try {
                 $registration->createUserByAdmin($event->user);
