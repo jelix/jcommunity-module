@@ -1,10 +1,11 @@
-Next
-====
+Version 1.3.14
+==============
 
+- Account creation form: add the status field to choice between NEW (an email will be send to the user)
+  and VALID (no mail will be sent). Choosing VALID can be usefull when the user authenticate himself with
+  other mecanisme than with the password.
 - Fix access to administration features like password reset and registration password resending.
   Controllers should check if jAuth authorize the user to change his password.
-
-
 
 Version 1.3.13
 ==============
