@@ -36,9 +36,9 @@ case $COMMAND in
       docker exec -it jcommunity_test_mysql mysql -u usertest -ptest1234 jcommunity
       ;;
     shell)
-       docker exec -it --user usertest jcommunity_php  /bin/sh -l;;
+       docker exec -it --user userphp jcommunity_php  /bin/bash -l;;
     shellroot)
-       docker exec -it jcommunity_php  /bin/sh  -l;;
+       docker exec -it jcommunity_php  /bin/bash  -l;;
     *)
         echo "wrong command"
         exit 2
