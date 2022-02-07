@@ -74,11 +74,11 @@ class loginCtrl extends jController {
         $conf = jApp::coord()->getPlugin('auth')->config;
 
         if ($conf['after_login'] == '') {
-            throw new jException ('jcommunity~login.error.no.auth_login');
+            throw new jException ('jcommunity~login.error.no.after_login');
         }
 
         if ($conf['after_logout'] == '') {
-            throw new jException ('jcommunity~login.error.no.auth_logout');
+            throw new jException ('jcommunity~login.error.no.after_logout');
         }
 
         $form = jForms::fill('jcommunity~login');
@@ -124,7 +124,7 @@ class loginCtrl extends jController {
         $conf = jApp::coord()->getPlugin ('auth')->config;
 
         if ($conf['after_logout'] == '') {
-            throw new jException ('jcommunity~login.error.no.auth_logout');
+            throw new jException ('jcommunity~login.error.no.after_logout');
         }
 
         if (jApp::coord()->execOriginalAction()) {
