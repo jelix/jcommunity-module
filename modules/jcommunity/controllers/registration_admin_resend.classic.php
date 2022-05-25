@@ -37,7 +37,16 @@ class registration_admin_resendCtrl extends \Jelix\JCommunity\AbstractController
         }
 
         if (!jAuth::canChangePassword($login)) {
-            $this->showError($rep, 'no_access_badstatus');
+            $error = 'no_access_badstatus';
+            if (method_exists('jAuth', 'getReasonToForbiddenPasswordChange')) {
+                // new in Jelix 1.6.37
+                $reason = jAuth::getReasonToForbiddenPasswordChange();
+                if ($reason) {
+                    $error = $reason;
+                }
+            }
+
+            $this->showError($rep, $error);
             return false;
         }
 
