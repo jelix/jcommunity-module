@@ -1,3 +1,9 @@
+Version 1.3.15
+==============
+
+- Display the reason why the password cannot be changed (when using Jelix 1.6.37+)
+- Fix exception messages into login/logout actions
+
 Version 1.3.14
 ==============
 
