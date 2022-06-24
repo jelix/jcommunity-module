@@ -5,7 +5,7 @@
 * @author       Bastien Jaillot <bastnicj@gmail.com>
 * @contributor
 * @copyright    2008 Bastien Jaillot
-* @link         http://bitbucket.org/laurentj/jcommunity/
+* @link         https://github.com/jelix/jcommunity-module/
 * @licence      http://www.gnu.org/licenses/gpl.html GNU General Public Licence, see LICENCE file
 */
 
