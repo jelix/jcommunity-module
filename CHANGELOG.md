@@ -1,3 +1,8 @@
+Version 1.3.16
+==============
+
+Compatibility with Jelix 1.8
+
 Version 1.3.15
 ==============
 

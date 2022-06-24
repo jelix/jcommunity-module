@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module xmlns="http://jelix.org/ns/module/1.0">
       <info id="jmessenger@jelix.org" name="jmessenger">
-        <version date="2018-01-07">1.1.1</version>
+        <version date="2022-06-24">1.1.2</version>
         <label>jMessenger</label>
         <description>internal messaging system</description>
         <licence URL="http://www.gnu.org/licenses/gpl.html">GPL</licence>
