@@ -5,6 +5,8 @@
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public Licence, see LICENCE file
  */
 use \Jelix\Installer\Module\API\ConfigurationHelpers;
+use Jelix\Routing\UrlMapping\EntryPointUrlModifier;
+use Jelix\Routing\UrlMapping\MapEntry\MapInclude;
 
 class jcommunityModuleConfigurator extends \Jelix\Installer\Module\Configurator {
 
@@ -23,6 +25,24 @@ class jcommunityModuleConfigurator extends \Jelix\Installer\Module\Configurator 
         );
     }
 
+    public function declareUrls(EntryPointUrlModifier $registerOnEntryPoint)
+    {
+        $registerOnEntryPoint->havingName(
+            'index',
+            array(
+                new MapInclude('urls_auth.xml', '/auth'),
+                new MapInclude('urls_account.xml', '/users'),
+                new MapInclude('urls_registration.xml', '/registration'),
+            )
+        )
+        ->havingName(
+            'admin',
+            array(
+                new MapInclude('urls_registration_admin.xml', '/registration'),
+            )
+        )
+        ;
+    }
     public function configure(ConfigurationHelpers $helpers)
     {
         $cli = $helpers->cli();

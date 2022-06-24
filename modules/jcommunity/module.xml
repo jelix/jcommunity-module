@@ -10,7 +10,7 @@
         <homepageURL>https://github.com/jelix/jcommunity-module/</homepageURL>
     </info>
     <dependencies>
-        <jelix minversion="1.6.24" maxversion="1.7.*"/>
+        <jelix minversion="1.6.24" maxversion="1.8.*"/>
         <conflict>
             <module name="jauth"/>
             <module name="jauthdb"/>
