@@ -120,6 +120,6 @@ class CreateUser extends \Jelix\Scripts\ModuleCommandAbstract
                 $code = 1;
             }
         }
-        return $this->displayMessage($output, $message, $code);
+        return $this->displayMessage($output, $code, $message);
     }
 }

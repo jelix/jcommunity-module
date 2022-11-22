@@ -47,6 +47,6 @@ class DeleteUser extends \Jelix\Scripts\ModuleCommandAbstract
         if (!$removed) {
             $code = 1;
         }
-        return $this->displayMessage($output, $message, $code);
+        return $this->displayMessage($output, $code, $message);
     }
 }
