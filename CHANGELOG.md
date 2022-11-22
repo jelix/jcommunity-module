@@ -1,3 +1,8 @@
+Version 1.3.17
+==============
+
+Fix bad returned code into commands.
+
 Version 1.3.16
 ==============
 
