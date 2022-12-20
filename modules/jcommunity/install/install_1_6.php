@@ -87,6 +87,16 @@ class jcommunityModuleInstaller extends jInstallerModule {
 
     function install() {
 
+        $epList = $this->getParameter('eps');
+        if ($epList !== null) {
+            if (is_string($epList)) {
+                $epList = preg_split('/\s*,\s*/', $epList);
+            }
+            if (!in_array($this->entryPoint->getEpId(), $epList)) {
+                return;
+            }
+        }
+
         if (self::$key === null) {
             self::$key = jAuth::getRandomPassword(30, true);
         }
