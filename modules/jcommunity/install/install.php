@@ -31,11 +31,11 @@ class jcommunityModuleInstaller extends \Jelix\Installer\Module\Installer {
     {
         // create random key for persistant authentication
         $configIni = $helpers->getLiveConfigIni();
-        $currentKey = $configIni->getValue('persistant_crypt_key', 'coordplugin_auth');
+        $currentKey = $configIni->getValue('persistant_encryption_key', 'coordplugin_auth');
         if ($currentKey === 'exampleOfCryptKey' || $currentKey == '') {
             $cryptokey = \Defuse\Crypto\Key::createNewRandomKey();
             $key = $cryptokey->saveToAsciiSafeString();
-            $configIni->setValue('persistant_crypt_key', $key, 'coordplugin_auth');
+            $configIni->setValue('persistant_encryption_key', $key, 'coordplugin_auth');
         }
 
         foreach ($this->getParameter('eps') as $epId) {
