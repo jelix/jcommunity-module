@@ -17,5 +17,10 @@
     "require-dev" : {
         
     },
+    "config": {
+      "allow-plugins": {
+        "jelix/composer-module-setup": true
+      }
+    },
     "minimum-stability": "stable"
 }

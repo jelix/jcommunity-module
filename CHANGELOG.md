@@ -1,3 +1,8 @@
+Version 1.3.18
+==============
+
+Fix persistant key name into Jelix 1.7+
+
 Version 1.3.17
 ==============
 
