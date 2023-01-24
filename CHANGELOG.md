@@ -1,3 +1,8 @@
+Version 1.3.19
+==============
+
+Fix upgrader for Jelix 1.6
+
 Version 1.3.18
 ==============
 
