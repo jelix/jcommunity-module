@@ -10,10 +10,9 @@
 /**
  * Upgrader for Jelix 1.6
  */
-class jcommunityModuleUpgrader_1_6 extends jInstallerModule {
+class jcommunityModuleUpgrader extends jInstallerModule {
 
     function install() {
-        // it is empty for now, to have upgrade.php runned only by Jelix 1.7+
-        echo "runned ???\n";
+
     }
 }
