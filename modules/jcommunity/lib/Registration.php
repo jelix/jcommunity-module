@@ -165,7 +165,7 @@ class Registration
         $config = new Config();
         $dtNow = new \DateTime();
         $dt = new \DateTime($user->request_date);
-        $dt->add($config->getValidationKeyTTL()); // 48h
+        $dt->add($config->getValidationKeyTTL());
         if ($dt < $dtNow ) {
             return self::CONFIRMATION_EXPIRED_KEY;
         }
