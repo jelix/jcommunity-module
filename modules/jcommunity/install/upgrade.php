@@ -19,10 +19,12 @@ class jcommunityModuleUpgrader extends \Jelix\Installer\Module\Installer
         $goodkey = $liveConfigIni->getValue('persistant_encryption_key', 'coordplugin_auth');
         if (!$goodkey) {
             $key = $liveConfigIni->getValue('persistant_crypt_key', 'coordplugin_auth');
-            if ($key != '') {
-                $liveConfigIni->setValue('persistant_encryption_key', $key, 'coordplugin_auth');
-                $liveConfigIni->removeValue('persistant_crypt_key', 'coordplugin_auth');
+            if ($key == '') {
+                $cryptokey = \Defuse\Crypto\Key::createNewRandomKey();
+                $key = $cryptokey->saveToAsciiSafeString();
             }
+            $liveConfigIni->setValue('persistant_encryption_key', $key, 'coordplugin_auth');
+            $liveConfigIni->removeValue('persistant_crypt_key', 'coordplugin_auth');
         }
     }
 }
