@@ -11,6 +11,14 @@ namespace Jelix\JCommunity;
 
 class Registration
 {
+
+    protected $replyToEmail = '';
+
+    public function __construct($replyToEmail = '')
+    {
+        $this->replyToEmail = $replyToEmail;
+    }
+
     /**
      * Create a user object.
      *
@@ -107,6 +115,10 @@ class Registration
         $mail->Subject = \jLocale::get('jcommunity~mail.registration.subject', $domain);
         $mail->AddAddress($user->email);
         $mail->isHtml(true);
+
+        if ($this->replyToEmail) {
+            $mail->addReplyTo($this->replyToEmail);
+        }
 
         $config = new Config();
         $tpl = new \jTpl();

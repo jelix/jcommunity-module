@@ -106,7 +106,7 @@ class registration_admin_resendCtrl extends \Jelix\JCommunity\AbstractController
         $rep = $this->getResponse('redirect');
         $rep->action = 'registration_admin_resend:index';
 
-        $registration = new \Jelix\JCommunity\Registration();
+        $registration = new \Jelix\JCommunity\Registration(\jAuth::getUserSession()->email);
         try {
             $registration->resendRegistrationMail($user, true);
         } catch(\phpmailerException $e) {

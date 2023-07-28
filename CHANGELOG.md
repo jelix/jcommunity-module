@@ -1,3 +1,12 @@
+
+Next
+====
+
+* Support of the Reply-To header when sending email. The value of this header
+  should be the email of the current user, when he create user or reset
+  the password of a user.
+
+
 Version 1.3.19
 ==============
 

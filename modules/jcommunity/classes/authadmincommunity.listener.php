@@ -146,7 +146,7 @@ class authadmincommunityListener extends jEventListener{
         $config = new \Jelix\JCommunity\Config();
         $sendEmail = $event->form->getData('jcommFirstStatus');
         if ($config->isResetAdminPasswordEnabledForAdmin() && $sendEmail == 'STATUS_NEW') {
-            $registration = new \Jelix\JCommunity\Registration();
+            $registration = new \Jelix\JCommunity\Registration(\jAuth::getUserSession()->email);
             try {
                 $registration->createUserByAdmin($event->user);
             } catch(\phpmailerException $e) {

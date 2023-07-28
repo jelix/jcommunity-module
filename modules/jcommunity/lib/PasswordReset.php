@@ -77,6 +77,12 @@ class PasswordReset {
         $mail->Sender = \jApp::config()->mailer['webmasterEmail'];
         $mail->Subject = \jLocale::get($this->subjectLocaleId, $domain);
         $mail->AddAddress($user->email);
+        if ($this->byAdmin) {
+            $email = \jAuth::getUserSession()->email;
+            if ($email) {
+                $mail->addReplyTo($email);
+            }
+        }
         $mail->isHtml(true);
 
         $tpl = new \jTpl();
