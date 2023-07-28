@@ -1,11 +1,12 @@
 
-Next
-====
+Version 1.3.20
+==============
 
 * Support of the Reply-To header when sending email. The value of this header
   should be the email of the current user, when he create user or reset
   the password of a user.
-
+* Fix the upgrader, to create the persistant_crypt_key if it does not exist
+* Fix the validity time of link into mail for password recovering
 
 Version 1.3.19
 ==============
