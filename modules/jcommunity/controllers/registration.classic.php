@@ -97,8 +97,6 @@ class registrationCtrl extends \Jelix\JCommunity\AbstractController
             return $rep;
         }
 
-        jEvent::notify('jcommunity_registration_after_save', array('form' => $form, 'user' => $user));
-
         try {
             $registration->createAccount($user);
         } catch(\phpmailerException $e) {
@@ -107,6 +105,8 @@ class registrationCtrl extends \Jelix\JCommunity\AbstractController
             jMessage::add($error, 'error');
             return $rep;
         }
+
+        jEvent::notify('jcommunity_registration_after_save', array('form' => $form, 'user' => $user));
 
         jForms::destroy('registration');
 
