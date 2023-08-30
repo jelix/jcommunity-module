@@ -1,3 +1,9 @@
+Next
+===
+
+* Dao: add the `getByLoginOrEmail` method to be compatible with Jelix 1.8.3, and to be able to activate
+  the authentication with the email
+* Fix: `jcommunity_registration_after_save` event should be emitted after the creation of the account
 
 Version 1.3.20
 ==============
