@@ -98,44 +98,25 @@ class Registration
 
     protected function sendRegistrationMail($user, $tplLocaleId, $mailLinkAction)
     {
-        if (method_exists('jServer', 'getDomainName')) {
-            $domain = \jServer::getDomainName();
-            $websiteUri =  \jServer::getServerURI();
-        }
-        else {
-            // old version of jelix < 1.7.5 && < 1.6.30
-            $domain = \jApp::coord()->request->getDomainName();
-            $websiteUri = \jApp::coord()->request->getServerURI();
-        }
-
-        $mail = new \jMailer();
-        $mail->From = \jApp::config()->mailer['webmasterEmail'];
-        $mail->FromName = \jApp::config()->mailer['webmasterName'];
-        $mail->Sender = \jApp::config()->mailer['webmasterEmail'];
-        $mail->Subject = \jLocale::get('jcommunity~mail.registration.subject', $domain);
-        $mail->AddAddress($user->email);
-        $mail->isHtml(true);
-
-        if ($this->replyToEmail) {
-            $mail->addReplyTo($this->replyToEmail);
-        }
 
         $config = new Config();
+        list($domain, $websiteUri) = $config->getDomainAndServerURI();
+
         $tpl = new \jTpl();
         $tpl->assign('user', $user);
-        $tpl->assign('domain_name', $domain);
-        $basePath = \jApp::urlBasePath();
-        $tpl->assign('basePath', ($basePath == '/'?'':$basePath));
-        $tpl->assign('website_uri', $websiteUri.($basePath == '/'?'':$basePath));
         $tpl->assign('confirmation_link', \jUrl::getFull(
             $mailLinkAction,
             array('login' => $user->login, 'key' => substr($user->keyactivate, 2))
         ));
         $tpl->assign('validationKeyTTL', $config->getValidationKeyTTLAsString());
 
-        $body = $tpl->fetchFromString(\jLocale::get($tplLocaleId), 'html');
-        $mail->msgHTML($body, '', array($mail, 'html2textKeepLinkSafe'));
-        $mail->Send();
+        $config->sendHtmlEmail(
+            $user->email,
+            \jLocale::get('jcommunity~mail.registration.subject', $domain),
+            $tpl,
+            \jLocale::get($tplLocaleId),
+            $this->replyToEmail
+        );
     }
 
 

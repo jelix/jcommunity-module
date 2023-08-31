@@ -205,4 +205,63 @@ class Config
         }
         return $this->publicProperties;
     }
+
+
+    public function getDomainAndServerURI()
+    {
+        if (method_exists('jServer', 'getDomainName')) {
+            $domain = \jServer::getDomainName();
+            $websiteUri =  \jServer::getServerURI();
+        }
+        else {
+            // old version of jelix < 1.7.5 && < 1.6.30
+            $domain = \jApp::coord()->request->getDomainName();
+            $websiteUri = \jApp::coord()->request->getServerURI();
+        }
+        return [$domain, $websiteUri];
+    }
+
+    /**
+     * Helper to send emails
+     *
+     * @param string $toEmail
+     * @param string $subject
+     * @param \jTpl $tpl
+     * @param string $templateContent
+     * @param string $replyTo
+     * @return bool
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
+    public function sendHtmlEmail($toEmail, $subject, $tpl, $templateContent, $replyTo='')
+    {
+        list($domain, $websiteUri) = $this->getDomainAndServerURI();
+
+        $mail = new \jMailer();
+        $mail->Subject = $subject;
+        $mail->AddAddress($toEmail);
+        $mail->isHtml(true);
+
+        if ($replyTo) {
+            $mail->addReplyTo($replyTo);
+        }
+        $tpl->assign('domain_name', $domain);
+        $basePath = \jApp::urlBasePath();
+        $tpl->assign('basePath', ($basePath == '/'?'':$basePath));
+        $tpl->assign('website_uri', $websiteUri.($basePath == '/'?'':$basePath));
+
+        $body = $tpl->fetchFromString($templateContent, 'html');
+        $mail->msgHTML($body, '', array($mail, 'html2textKeepLinkSafe'));
+        try {
+            $mail->Send();
+        }
+        catch(\PHPMailer\PHPMailer\Exception $e) {
+            \jLog::logEx($e, 'error');
+            return false;
+        }
+        catch(\Exception $e) {
+            \jLog::logEx($e, 'error');
+            return false;
+        }
+        return true;
+    }
 }

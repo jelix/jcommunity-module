@@ -61,50 +61,30 @@ class PasswordReset {
         $user->request_date = date('Y-m-d H:i:s');
         $user->keyactivate = ($this->byAdmin?'A:':'U:').$key;
 
-        if (method_exists('jServer', 'getDomainName')) {
-            $domain = \jServer::getDomainName();
-            $websiteUri =  \jServer::getServerURI();
-        }
-        else {
-            // old version of jelix < 1.7.5 && < 1.6.30
-            $domain = \jApp::coord()->request->getDomainName();
-            $websiteUri = \jApp::coord()->request->getServerURI();
-        }
+        $config = new Config();
+        list($domain, $websiteUri) = $config->getDomainAndServerURI();
 
-        $mail = new \jMailer();
-        $mail->From = \jApp::config()->mailer['webmasterEmail'];
-        $mail->FromName = \jApp::config()->mailer['webmasterName'];
-        $mail->Sender = \jApp::config()->mailer['webmasterEmail'];
-        $mail->Subject = \jLocale::get($this->subjectLocaleId, $domain);
-        $mail->AddAddress($user->email);
+        $replyTo = '';
         if ($this->byAdmin) {
-            $email = \jAuth::getUserSession()->email;
-            if ($email) {
-                $mail->addReplyTo($email);
-            }
+            $replyTo = \jAuth::getUserSession()->email;
         }
-        $mail->isHtml(true);
 
         $tpl = new \jTpl();
         $tpl->assign('user', $user);
-        $tpl->assign('domain_name', $domain);
-        $basePath = \jApp::urlBasePath();
-        $tpl->assign('basePath', ($basePath == '/'?'':$basePath));
-        $tpl->assign('website_uri', $websiteUri.($basePath == '/'?'':$basePath));
         $tpl->assign('confirmation_link', \jUrl::getFull(
             'jcommunity~password_reset:resetform@classic',
             array('login' => $user->login, 'key' => $key)
         ));
-        $config = new Config();
+
         $tpl->assign('validationKeyTTL', $config->getValidationKeyTTLAsString());
 
-        $body = $tpl->fetchFromString(\jLocale::get($this->tplLocaleId), 'html');
-        $mail->msgHTML($body, '', array($mail, 'html2textKeepLinkSafe'));
-        try {
-            $mail->Send();
-        }
-        catch(\phpmailerException $e) {
-            \jLog::logEx($e, 'error');
+        if (!$config->sendHtmlEmail(
+            $user->email,
+            \jLocale::get($this->subjectLocaleId, $domain),
+            $tpl,
+            \jLocale::get($this->tplLocaleId),
+            $replyTo)
+        ) {
             return self::RESET_MAIL_SERVER_ERROR;
         }
 
