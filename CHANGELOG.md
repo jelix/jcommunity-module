@@ -1,6 +1,8 @@
 Next
 ===
 
+* new: possibility to notify by mail when a user make changes into his account.
+  Three new configuration parameters: `notifyAccountChange`, `notificationReceiverEmail`, `notificationReceiverName`.
 * Dao: add the `getByLoginOrEmail` method to be compatible with Jelix 1.8.3, and to be able to activate
   the authentication with the email
 * Fix: `jcommunity_registration_after_save` event should be emitted after the creation of the account

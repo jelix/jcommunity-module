@@ -27,6 +27,12 @@ class Config
 
     protected $publicProperties = array('login', 'nickname', 'create_date');
 
+    protected $notifyAccountChange = false;
+
+    protected $notificationReceiverName = '';
+
+    protected $notificationReceiverEmail = '';
+
     /**
      * @var integer  TTL in minutes
      */
@@ -53,6 +59,9 @@ class Config
             'accountDestroyEnabled' => 'accountDestroyEnabled',
             'useJAuthDbAdminRights' => 'useJAuthDbAdminRights',
             'validationKeyTTL' => 'validationKeyTTL',
+            'notifyAccountChange' => 'notifyAccountChange',
+            'notificationReceiverName' => 'notificationReceiverName',
+            'notificationReceiverEmail' => 'notificationReceiverEmail',
                 ) as $prop => $param) {
             if (array_key_exists($param, $config)) {
                 $this->$prop = $config[$param];
@@ -150,6 +159,12 @@ class Config
         return true;
     }
 
+    public function mustAccountChangeBeNotified()
+    {
+        list($email, $name) = $this->getNotificationReceiver();
+        return $this->notifyAccountChange && ($email != '');
+    }
+
     public function isAccountDestroyEnabled() {
         return $this->accountDestroyEnabled && $this->isAccountChangeEnabled();
     }
@@ -219,6 +234,25 @@ class Config
             $websiteUri = \jApp::coord()->request->getServerURI();
         }
         return [$domain, $websiteUri];
+    }
+
+    /**
+     * Give email and name of the user who receives notifications
+     *
+     * @return array  ['the email', 'name']
+     */
+    public function getNotificationReceiver()
+    {
+        if ($this->notificationReceiverEmail == '') {
+            $config = \jApp::config()->mailer;
+            $email = $config['webmasterEmail'];
+            $name = $config['webmasterName'];
+        }
+        else {
+            $email = $this->notificationReceiverEmail;
+            $name = $this->notificationReceiverName;
+        }
+        return [$email, $name];
     }
 
     /**

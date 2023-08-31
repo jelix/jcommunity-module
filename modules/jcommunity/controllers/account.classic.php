@@ -141,6 +141,7 @@ class accountCtrl extends \Jelix\JCommunity\AbstractController
 
         jEvent::notify('jcommunity_prepare_edit_account', array('login' => $login, 'form' => $form));
 
+        $form->initModifiedControlsList();
         $rep->action = 'jcommunity~account:edit';
 
         return $rep;
@@ -245,6 +246,37 @@ class accountCtrl extends \Jelix\JCommunity\AbstractController
                 'to_insert' => false)
             );
             $accountFact->update($daoUser);
+
+            if ($config->mustAccountChangeBeNotified() && $form->getModifiedControls()) {
+
+                if (isset($daoUser->firstname) && isset($daoUser->lastname)) {
+                    $username = $daoUser->firstname.' '.$daoUser->lastname;
+                }
+                else if (isset($daoUser->username)) {
+                    $username = $daoUser->username;
+                }
+                else {
+                    $username = $daoUser->login;
+                }
+
+                list($domain, $websiteUri) = $config->getDomainAndServerURI();
+                list($emailDest, $nameDest) = $config->getNotificationReceiver();
+                $tpl = new \jTpl();
+                $tpl->assign('userName', $username);
+                if (\jApp::isModuleEnabled('jauthdb_admin')) {
+                    $tpl->assign('profilLink', \jUrl::getFull('jauthdb_admin~default:view', ['j_user_login' => $login]));
+                }
+                else {
+                    $tpl->assign('profilLink', \jUrl::getFull('jcommunity~account:show', ['user' => $login]));
+                }
+
+                $config->sendHtmlEmail(
+                    $emailDest,
+                    \jLocale::get('jcommunity~mail.account.change.notification.subject', array($login, $domain)),
+                    $tpl,
+                    \jLocale::get('jcommunity~mail.account.change.notification.body.html'),
+                );
+            }
 
             jForms::destroy($this->getAccountForm(), $login);
         }

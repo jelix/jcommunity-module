@@ -14,6 +14,9 @@ passwordChangeEnabled=on
 ;publicProperties[]=nickname
 ;publicProperties[]=create_date
 ;disableJPref = on
+notificationReceiverEmail=
+notificationReceiverName=
+notifyAccountChange=off
 
 [mailer]
 webmasterEmail = laurent@jelix.org

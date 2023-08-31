@@ -85,7 +85,10 @@ class jcommunityModuleConfigurator extends \Jelix\Installer\Module\Configurator 
             'resetAdminPasswordEnabled' =>true,
             'disableJPref' =>true,
             'noRedirectionOnAuthenticatedLoginPage' => false,
-            'publicProperties' =>array('login', 'nickname', 'create_date')
+            'publicProperties' =>array('login', 'nickname', 'create_date'),
+            'notifyAccountChange' => false,
+            'notificationReceiverEmail' => '',
+            'notificationReceiverName' => '',
         );
 
         foreach($defaultConfig as $name => $defaultValue) {
