@@ -5,6 +5,8 @@ Next
   Three new configuration parameters: `notifyAccountChange`, `notificationReceiverEmail`, `notificationReceiverName`.
 * Dao: add the `getByLoginOrEmail` method to be compatible with Jelix 1.8.3, and to be able to activate
   the authentication with the email
+* Increase the minimum length of password to 12 characters
+* Fix: no limit of characters when the user gives a password during login
 * Fix: `jcommunity_registration_after_save` event should be emitted after the creation of the account
 
 Version 1.3.20
