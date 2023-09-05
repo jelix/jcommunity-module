@@ -109,6 +109,11 @@ class registration_admin_resendCtrl extends \Jelix\JCommunity\AbstractController
         $registration = new \Jelix\JCommunity\Registration(\jAuth::getUserSession()->email);
         try {
             $registration->resendRegistrationMail($user, true);
+        } catch(\PHPMailer\PHPMailer\Exception $e) {
+            \jLog::logEx($e, 'error');
+            $rep = $this->_getjCommunityResponse();
+            $rep->title = jLocale::get('register.admin.resend.email.title');
+            return $this->showError($rep, jLocale::get('jcommunity~password.form.change.error.smtperror'));
         } catch(\phpmailerException $e) {
             \jLog::logEx($e, 'error');
             $rep = $this->_getjCommunityResponse();

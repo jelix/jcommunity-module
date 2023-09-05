@@ -99,7 +99,12 @@ class registrationCtrl extends \Jelix\JCommunity\AbstractController
 
         try {
             $registration->createAccount($user);
-        } catch(\phpmailerException $e) {
+        } catch(\PHPMailer\PHPMailer\Exception $e) {
+            \jLog::logEx($e, 'error');
+            $error =  jLocale::get('jcommunity~password.form.change.error.smtperror');
+            jMessage::add($error, 'error');
+            return $rep;
+        } catch(\phpmailerException $e) { // jelix 1.6
             \jLog::logEx($e, 'error');
             $error =  jLocale::get('jcommunity~password.form.change.error.smtperror');
             jMessage::add($error, 'error');

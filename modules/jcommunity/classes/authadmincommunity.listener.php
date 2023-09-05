@@ -149,6 +149,10 @@ class authadmincommunityListener extends jEventListener{
             $registration = new \Jelix\JCommunity\Registration(\jAuth::getUserSession()->email);
             try {
                 $registration->createUserByAdmin($event->user);
+            } catch(\PHPMailer\PHPMailer\Exception $e) {
+                \jLog::logEx($e, 'error');
+                jMessage::add(jLocale::get('jcommunity~password.form.change.error.smtperror'), 'error');
+                return;
             } catch(\phpmailerException $e) {
                 \jLog::logEx($e, 'error');
                 jMessage::add(jLocale::get('jcommunity~password.form.change.error.smtperror'), 'error');
