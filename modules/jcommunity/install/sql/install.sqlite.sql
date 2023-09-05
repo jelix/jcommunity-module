@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS %%PREFIX%%community_users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  login varchar(50) NOT NULL UNIQUE,
+  login varchar(255) NOT NULL UNIQUE,
   password varchar(120) NOT NULL,
   email varchar(255) NOT NULL,
   nickname varchar(50) DEFAULT NULL,

@@ -1,7 +1,7 @@
 
 CREATE TABLE IF NOT EXISTS `%%PREFIX%%community_users` (
   `id` int(11) NOT NULL auto_increment,
-  `login` varchar(50) NOT NULL,
+  `login` varchar(255) NOT NULL,
   `password` varchar(120) NOT NULL,
   `email` varchar(255) NOT NULL,
   `nickname` varchar(50) default NULL,

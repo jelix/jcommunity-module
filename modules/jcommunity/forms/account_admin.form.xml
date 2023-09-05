@@ -12,7 +12,7 @@
     <hidden ref="id">
     </hidden>
 
-    <input ref="login" required="true" maxlength="50">
+    <input ref="login" required="true" maxlength="255">
        <label locale="jcommunity~account.form.login"/>
     </input>
 
@@ -20,7 +20,7 @@
        <label locale="jcommunity~account.form.nickname"/>
     </input>
 
-    <input ref="email"  required="true" type="email">
+    <input ref="email"  required="true" type="email" maxlength="255">
         <label locale="jcommunity~account.form.email"/>
     </input>
 
