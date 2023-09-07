@@ -20,7 +20,7 @@
        <label locale="jcommunity~account.form.nickname"/>
     </input>
 
-    <input ref="email"  required="true" type="email" maxlength="255">
+    <input ref="email"  required="true" type="email">
         <label locale="jcommunity~account.form.email"/>
     </input>
 
