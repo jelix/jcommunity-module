@@ -55,7 +55,7 @@ class AbstractController extends \jController
         return ($himself || \jAcl2::check('auth.users.view'));
     }
 
-    protected function _getjCommunityResponse()
+    protected function _getjCommunityResponse($windowTitle, $pageTitle='')
     {
         $response = 'html';
         if ($this->responseId == ''  && isset(\jApp::config()->jcommunity)) {
@@ -63,12 +63,20 @@ class AbstractController extends \jController
             $response = (isset($conf['loginResponse']) ? $conf['loginResponse'] : 'html');
         }
 
-        return $this->getResponse($response);
+        $rep = $this->getResponse($response);
+        $rep->title = $windowTitle;
+        if ($pageTitle == '') {
+            $pageTitle = $windowTitle;
+        }
+        if ($response == 'htmlauth') {
+            $rep->body->assign('page_title', $pageTitle);
+        }
+        return $rep;
     }
 
     protected function noaccess($errorId = '')
     {
-        $rep = $this->_getjCommunityResponse();
+        $rep = $this->_getjCommunityResponse('Forbidden');
         $rep->setHttpStatus(403, 'Forbidden');
         return $this->showError($rep, $errorId);
     }
@@ -93,14 +101,14 @@ class AbstractController extends \jController
 
     protected function notavailable($errorId = 'not_available')
     {
-        $rep = $this->_getjCommunityResponse();
+        $rep = $this->_getjCommunityResponse('Not found');
         $rep->setHttpStatus(404, 'Not found');
         return $this->showError($rep, $errorId);
     }
 
     protected function badParameters()
     {
-        $rep = $this->_getjCommunityResponse();
+        $rep = $this->_getjCommunityResponse('Bad request');
         $rep->setHttpStatus(400, 'Bad request');
         return $this->showError($rep, 'Invalid parameters');
     }

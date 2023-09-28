@@ -26,8 +26,8 @@ class password_resetCtrl extends \Jelix\JCommunity\AbstractPasswordController
             return $repError;
         }
 
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get('password.form.title');
+        $rep = $this->_getjCommunityResponse(jLocale::get('password.form.title'), jLocale::get('password.page.title'));
+
         $rep->body->assignZone('MAIN', 'passwordReset');
 
         return $rep;
@@ -91,8 +91,7 @@ class password_resetCtrl extends \Jelix\JCommunity\AbstractPasswordController
             return $repError;
         }
 
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get('password.form.title');
+        $rep = $this->_getjCommunityResponse(jLocale::get('password.form.title'), jLocale::get('password.page.title'));
         $tpl = new jTpl();
         $rep->body->assign('MAIN', $tpl->fetch('password_reset_waiting'));
 

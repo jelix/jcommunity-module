@@ -29,8 +29,7 @@ class registrationCtrl extends \Jelix\JCommunity\AbstractController
             return $repError;
         }
 
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get('register.registration.title');
+        $rep = $this->_getjCommunityResponse(jLocale::get('register.registration.title'));
         $rep->body->assignZone('MAIN', 'registration');
 
         return $rep;
@@ -126,8 +125,7 @@ class registrationCtrl extends \Jelix\JCommunity\AbstractController
             return $repError;
         }
 
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get('register.registration.waiting.title');
+        $rep = $this->_getjCommunityResponse(jLocale::get('register.registration.waiting.title'));
         $tpl = new jTpl();
         $rep->body->assign('MAIN', $tpl->fetch('registration_waiting'));
 

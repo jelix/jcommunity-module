@@ -17,6 +17,7 @@ class password_confirm_registrationCtrl extends \Jelix\JCommunity\AbstractPasswo
     protected $configMethodCheck = 'isResetAdminPasswordEnabled';
 
 
+    protected $pagePasswordTitle = 'password.page.create.title';
     protected $formPasswordTitle = 'password.form.create.title';
 
     protected $formPasswordTpl = 'password_reset_create';

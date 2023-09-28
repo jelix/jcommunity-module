@@ -21,6 +21,8 @@ abstract class AbstractPasswordController extends AbstractController
 
     protected $configMethodCheck = 'isResetPasswordEnabled';
 
+    protected $pagePasswordTitle = 'password.page.change.title';
+
     protected $formPasswordTitle = 'password.form.change.title';
 
     protected $formPasswordTpl = 'password_reset_change';
@@ -39,8 +41,7 @@ abstract class AbstractPasswordController extends AbstractController
             return $repError;
         }
 
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get($this->formPasswordTitle);
+        $rep = $this->_getjCommunityResponse(jLocale::get($this->formPasswordTitle), jLocale::get($this->pagePasswordTitle));
 
         $passReset = new \Jelix\JCommunity\PasswordReset($this->forRegistration);
         $tpl = new jTpl();
@@ -119,8 +120,7 @@ abstract class AbstractPasswordController extends AbstractController
      */
     public function changed()
     {
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get($this->formPasswordTitle);
+        $rep = $this->_getjCommunityResponse(jLocale::get($this->formPasswordTitle), jLocale::get($this->pagePasswordTitle));
         $tpl = new jTpl();
         $tpl->assign('title', $rep->title);
         $rep->body->assign('MAIN', $tpl->fetch('password_reset_ok'));

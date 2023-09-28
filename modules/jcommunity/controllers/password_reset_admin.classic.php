@@ -62,8 +62,7 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
             return $repError;
         }
 
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get('password.form.title');
+        $rep = $this->_getjCommunityResponse(jLocale::get('password.form.title'));
 
         $login = $this->param('login');
 
@@ -91,8 +90,7 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
 
         $login = $this->param('pass_login');
 
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get('password.form.title');
+        $rep = $this->_getjCommunityResponse(jLocale::get('password.form.title'));
         $user = $this->_checkUser($login, $rep);
         if ($user === false) {
             return $rep;
@@ -112,8 +110,7 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
         }
 
         if ($result != \Jelix\JCommunity\PasswordReset::RESET_OK) {
-            $rep = $this->_getjCommunityResponse();
-            $rep->title = jLocale::get('password.form.title');
+            $rep = $this->_getjCommunityResponse(jLocale::get('password.form.title'));
 
             $tpl = new \jTpl();
             $tpl->assign('login', $login);
@@ -141,8 +138,7 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
             return $repError;
         }
 
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get('password.form.title');
+        $rep = $this->_getjCommunityResponse(jLocale::get('password.form.title'));
         $tpl = new jTpl();
         $tpl->assign('login', $this->param('login'));
         $rep->body->assign('MAIN', $tpl->fetch('password_reset_admin_waiting'));

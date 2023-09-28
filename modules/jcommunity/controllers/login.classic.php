@@ -62,6 +62,7 @@ class loginCtrl extends jController {
 
         $rep = $this->getResponse($response);
         $rep->title = jLocale::get('login.login.title');
+        $rep->body->assign('page_title', $rep->title);
         $rep->body->assignZone('MAIN','jcommunity~login', array('as_main_content'=>true));
         return $rep;
     }

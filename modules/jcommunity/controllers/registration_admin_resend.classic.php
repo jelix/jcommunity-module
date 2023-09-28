@@ -67,8 +67,7 @@ class registration_admin_resendCtrl extends \Jelix\JCommunity\AbstractController
             return $repError;
         }
 
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get('register.admin.resend.email.title');
+        $rep = $this->_getjCommunityResponse(jLocale::get('register.admin.resend.email.title'), jLocale::get('register.form.create.title'));
 
         $login = $this->param('login');
 
@@ -96,8 +95,7 @@ class registration_admin_resendCtrl extends \Jelix\JCommunity\AbstractController
 
         $login = $this->param('pass_login');
 
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get('register.admin.resend.email.title');
+        $rep = $this->_getjCommunityResponse(jLocale::get('register.admin.resend.email.title'), jLocale::get('register.form.create.title'));
         $user = $this->_checkUser($login, $rep);
         if ($user === false) {
             return $rep;
@@ -111,13 +109,11 @@ class registration_admin_resendCtrl extends \Jelix\JCommunity\AbstractController
             $registration->resendRegistrationMail($user, true);
         } catch(\PHPMailer\PHPMailer\Exception $e) {
             \jLog::logEx($e, 'error');
-            $rep = $this->_getjCommunityResponse();
-            $rep->title = jLocale::get('register.admin.resend.email.title');
+            $rep = $this->_getjCommunityResponse(jLocale::get('register.admin.resend.email.title'), jLocale::get('register.form.create.title'));
             return $this->showError($rep, jLocale::get('jcommunity~password.form.change.error.smtperror'));
         } catch(\phpmailerException $e) {
             \jLog::logEx($e, 'error');
-            $rep = $this->_getjCommunityResponse();
-            $rep->title = jLocale::get('register.admin.resend.email.title');
+            $rep = $this->_getjCommunityResponse(jLocale::get('register.admin.resend.email.title'), jLocale::get('register.form.create.title'));
             return $this->showError($rep, jLocale::get('jcommunity~password.form.change.error.smtperror'));
         }
 
@@ -140,8 +136,7 @@ class registration_admin_resendCtrl extends \Jelix\JCommunity\AbstractController
             return $repError;
         }
 
-        $rep = $this->_getjCommunityResponse();
-        $rep->title = jLocale::get('register.admin.resend.email.title');
+        $rep = $this->_getjCommunityResponse(jLocale::get('register.admin.resend.email.title'), jLocale::get('register.form.create.title'));
         $tpl = new jTpl();
         $tpl->assign('login', $this->param('login'));
         $rep->body->assign('MAIN', $tpl->fetch('registration_admin_resend_done'));
