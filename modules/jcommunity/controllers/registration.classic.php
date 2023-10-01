@@ -10,6 +10,7 @@
 */
 
 use \Jelix\JCommunity\Registration;
+use \Jelix\JCommunity\FormPassword;
 
 class registrationCtrl extends \Jelix\JCommunity\AbstractController
 {
@@ -57,6 +58,11 @@ class registrationCtrl extends \Jelix\JCommunity\AbstractController
         jEvent::notify('jcommunity_registration_init_form', array('form' => $form));
 
         $form->initFromRequest();
+
+        if (FormPassword::canUseSecretEditor() && !FormPassword::checkPassword($form->getData('reg_password'))) {
+            $form->setErrorOn('reg_password', jLocale::get('jelix~jforms.password.not.strong.enough'));
+        }
+
         if (!$form->check()) {
             return $rep;
         }

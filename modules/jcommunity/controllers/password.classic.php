@@ -9,6 +9,8 @@
  * @licence      http://www.gnu.org/licenses/gpl.html GNU General Public Licence, see LICENCE file
  */
 
+use \Jelix\JCommunity\FormPassword;
+
 /**
  * controller allowing the authenticated user to change his own password
  */
@@ -96,7 +98,9 @@ class passwordCtrl extends \Jelix\JCommunity\AbstractController
         if ($form == null) {
             return $rep;
         }
-
+        if (FormPassword::canUseSecretEditor() && !FormPassword::checkPassword($form->getData('reg_password'))) {
+            $form->setErrorOn('reg_password', jLocale::get('jelix~jforms.password.not.strong.enough'));
+        }
         if (!$form->check()) {
             return $rep;
         }

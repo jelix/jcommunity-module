@@ -96,6 +96,10 @@ abstract class AbstractPasswordController extends AbstractController
             return $rep;
         }
 
+        if (FormPassword::canUseSecretEditor() && !FormPassword::checkPassword($form->getData('pchg_password'))) {
+            $form->setErrorOn('pchg_password', jLocale::get('jelix~jforms.password.not.strong.enough'));
+        }
+
         if (!$form->check()) {
             return $rep;
         }
