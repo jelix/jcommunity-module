@@ -105,12 +105,15 @@ useJAuthDbAdminRights=on
 registrationEnabled=on
 resetPasswordEnabled=on
 resetAdminPasswordEnabled=on
+noRedirectionOnAuthenticatedLoginPage=off
 disableJPref=on
 publicProperties[]=login
 publicProperties[]=nickname
 publicProperties[]=create_date
 ;validationKeyTTL=1560
-
+notifyAccountChange=off
+notificationReceiverEmail=
+notificationReceiverName=
 
 [acl2]
 driver=db

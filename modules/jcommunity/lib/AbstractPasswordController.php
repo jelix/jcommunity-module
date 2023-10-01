@@ -63,6 +63,8 @@ abstract class AbstractPasswordController extends AbstractController
             $form->setData('pchg_login', $login);
             $form->setData('pchg_key', $key);
         }
+
+        $tpl->assign('passwordWidget', FormPassword::getWidget($form, 'pchg_password'));
         $tpl->assign('error_status', '');
         $tpl->assign('form', $form);
 

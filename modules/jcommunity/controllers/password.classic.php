@@ -56,10 +56,7 @@ class passwordCtrl extends \Jelix\JCommunity\AbstractController
 
         $tpl = new jTpl();
 
-        $form = jForms::get('password_change');
-        if ($form == null) {
-            $form = jForms::create('password_change');
-        }
+        list($form, $passWidget) = \Jelix\JCommunity\FormPassword::getFormAndWidget('password_change', 'pchg_password');
 
         if (jAuth::getUserSession()->status < \Jelix\JCommunity\Account::STATUS_VALID) {
             $tpl->assign('error_status', 'badstatus');
@@ -69,6 +66,7 @@ class passwordCtrl extends \Jelix\JCommunity\AbstractController
         }
 
         $tpl->assign('form', $form);
+        $tpl->assign('passwordWidget', $passWidget);
         $tpl->assign('login', jAuth::getUserSession()->login);
         $rep->body->assign('MAIN', $tpl->fetch('password_change'));
 
