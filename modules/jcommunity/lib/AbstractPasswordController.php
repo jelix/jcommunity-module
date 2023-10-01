@@ -21,7 +21,7 @@ abstract class AbstractPasswordController extends AbstractController
 
     protected $configMethodCheck = 'isResetPasswordEnabled';
 
-    protected $pagePasswordTitle = 'password.page.change.title';
+    protected $pagePasswordTitle = 'password.page.title';
 
     protected $formPasswordTitle = 'password.form.change.title';
 
