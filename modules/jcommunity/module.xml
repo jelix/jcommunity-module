@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module xmlns="http://jelix.org/ns/module/1.0">
       <info id="jcommunity@jelix.org" name="jcommunity">
-        <version date="2023-09-14">1.4.0-beta.1</version>
+        <version date="2023-10-02">1.4.0-rc.1</version>
         <label>jCommunity</label>
         <description>module for a portal, to bring registration, profile editing for users</description>
         <licence URL="http://www.gnu.org/licenses/gpl.html">GPL</licence>
@@ -10,7 +10,7 @@
         <homepageURL>https://github.com/jelix/jcommunity-module/</homepageURL>
     </info>
     <dependencies>
-        <jelix minversion="1.6.24" maxversion="1.8.*"/>
+        <jelix minversion="1.7.0" maxversion="1.8.*"/>
         <conflict>
             <module name="jauth"/>
             <module name="jauthdb"/>

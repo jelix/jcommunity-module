@@ -3,13 +3,16 @@ Next
 
 * new: possibility to notify by mail when a user make changes into his account.
   Three new configuration parameters: `notifyAccountChange`, `notificationReceiverEmail`, `notificationReceiverName`.
-* Dao: add the `getByLoginOrEmail` method to be compatible with Jelix 1.8.3, and to be able to activate
-  the authentication with the email or the login
-* When using Jelix 1.8.3, use the new password strength checker of Jelix 1.8.3 in forms asking a new password
+* Use new features from Jelix 1.8.3 when the module is installed with Jelix 1.8.3+
+  * Dao: add the `getByLoginOrEmail` method and to be able to activate
+    the authentication with the email or the login
+  * Use the new password strength checker in forms asking a new password
 * Increase the length of the login field, so we can use emails as login 
 * Increase the minimum length of password to 12 characters
 * Fix: no limit of characters when the user gives a password during login
 * Fix: `jcommunity_registration_after_save` event should be emitted after the creation of the account
+* Fix: set the page title on some pages (set a `page_title` template variable on the response) 
+
 
 Version 1.3.20
 ==============
