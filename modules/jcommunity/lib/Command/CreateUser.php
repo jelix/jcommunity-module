@@ -114,7 +114,7 @@ class CreateUser extends \Jelix\Scripts\ModuleCommandAbstract
 
         if ($reset) {
             $passReset = new \Jelix\JCommunity\PasswordReset(true, true);
-            $result = $passReset->sendEmail($login, $user->email);
+            $result = $passReset->sendEmail($user);
             if ($result != \Jelix\JCommunity\PasswordReset::RESET_OK) {
                 $message = $message.\jLocale::get('jcommunity~password.reset.cmdline.error');
                 $code = 1;

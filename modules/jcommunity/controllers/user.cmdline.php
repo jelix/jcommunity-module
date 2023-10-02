@@ -154,7 +154,7 @@ class userCtrl extends jControllerCmdLine {
         if (!$code && ($userInfos->status == \Jelix\JCommunity\Account::STATUS_VALID
             || $userInfos->status == \Jelix\JCommunity\Account::STATUS_PWD_CHANGED)) {
             $passReset = new \Jelix\JCommunity\PasswordReset(true, true);
-            $result = $passReset->sendEmail($login, $userInfos->email);
+            $result = $passReset->sendEmail($userInfos);
         }
         else {
             $result = \Jelix\JCommunity\PasswordReset::RESET_BAD_STATUS;
@@ -218,7 +218,7 @@ class userCtrl extends jControllerCmdLine {
 
         if ($reset) {
             $passReset = new \Jelix\JCommunity\PasswordReset(true, true);
-            $result = $passReset->sendEmail($login, $user->email);
+            $result = $passReset->sendEmail($user);
             if ($result != \Jelix\JCommunity\PasswordReset::RESET_OK) {
                 $message = $message.jLocale::get('password.reset.cmdline.error').PHP_EOL;
                 $code = 1;

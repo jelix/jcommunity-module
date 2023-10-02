@@ -50,9 +50,10 @@ class ResetPassword extends \Jelix\Scripts\ModuleCommandAbstract
         }
 
         if (!$code && ($user->status == \Jelix\JCommunity\Account::STATUS_VALID
-            || $user->status == \Jelix\JCommunity\Account::STATUS_PWD_CHANGED)) {
+            || $user->status == \Jelix\JCommunity\Account::STATUS_PWD_CHANGED)
+        ) {
             $passReset = new \Jelix\JCommunity\PasswordReset(true, true);
-            $result = $passReset->sendEmail($login, $user->email);
+            $result = $passReset->sendEmail($user);
         }
         else {
             $result = \Jelix\JCommunity\PasswordReset::RESET_BAD_STATUS;

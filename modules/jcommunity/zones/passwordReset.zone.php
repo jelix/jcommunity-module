@@ -15,11 +15,17 @@ class passwordResetZone extends jZone {
    protected $_tplname = 'password_reset_form';
 
 
-    protected function _prepareTpl(){
+    protected function _prepareTpl()
+    {
         $form = jForms::get('password_reset');
-        if($form == null){
+        if ($form == null) {
             $form = jForms::create('password_reset');
+
+            if (\jAuth::getDriverParam('authenticateWith') == 'login-email') {
+                $form->deactivate('pass_email');
+            }
         }
+
         $this->_tpl->assign('form',$form);
     }
 

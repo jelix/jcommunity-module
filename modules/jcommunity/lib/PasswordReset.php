@@ -35,15 +35,27 @@ class PasswordReset {
     }
 
 
-    function sendEmail($login, $email)
+    /**
+     * @param object $user
+     * @return string
+     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws \jException
+     * @throws \jExceptionSelector
+     */
+    function sendEmail($user)
     {
-        $user = \jAuth::getUser($login);
-        if (!$user || $user->email == '' || $user->email != $email) {
-            \jLog::log('A password reset is attempted for unknown user "'.$login.'" and/or unknown email  "'.$email.'"', 'warning');
+
+        if (!$user) {
+            \jLog::log('A password reset is attempted for unknown user', 'warning');
             return self::RESET_BAD_LOGIN_EMAIL;
         }
 
-        if (!\jAuth::canChangePassword($login)) {
+        if ($user->email == '') {
+            \jLog::log('A password reset is attempted for the user "'.$user->login.'" having no mail', 'warning');
+            return self::RESET_BAD_LOGIN_EMAIL;
+        }
+
+        if (!\jAuth::canChangePassword($user->login)) {
             return self::RESET_BAD_STATUS;
         }
 
@@ -54,7 +66,7 @@ class PasswordReset {
             return self::RESET_BAD_STATUS;
         }
 
-        $key = sha1(password_hash($login.$email.microtime(),PASSWORD_DEFAULT));
+        $key = sha1(password_hash($user->login.$user->email.microtime(),PASSWORD_DEFAULT));
         if ($user->status != Account::STATUS_NEW) {
             $user->status = Account::STATUS_PWD_CHANGED;
         }

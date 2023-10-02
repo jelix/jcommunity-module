@@ -103,7 +103,7 @@ class password_reset_adminCtrl extends \Jelix\JCommunity\AbstractController
             $user->status == \Jelix\JCommunity\Account::STATUS_PWD_CHANGED
         ) {
             $passReset = new \Jelix\JCommunity\PasswordReset(true, true);
-            $result = $passReset->sendEmail($login, $user->email);
+            $result = $passReset->sendEmail($user);
         }
         else {
             $result = \Jelix\JCommunity\PasswordReset::RESET_BAD_STATUS;
