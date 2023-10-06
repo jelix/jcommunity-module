@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <module xmlns="http://jelix.org/ns/module/1.0">
       <info id="jcommunity@jelix.org" name="jcommunity">
-        <version date="2023-10-02">1.4.0-rc.1</version>
+        <version date="2023-10-06">1.4.0-rc.2</version>
         <label>jCommunity</label>
         <description>module for a portal, to bring registration, profile editing for users</description>
         <licence URL="http://www.gnu.org/licenses/gpl.html">GPL</licence>
