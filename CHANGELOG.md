@@ -1,6 +1,10 @@
 Next
 ===
 
+
+Version 1.4.0
+=============
+
 * new: possibility to notify by mail when a user make changes into his account.
   Three new configuration parameters: `notifyAccountChange`, `notificationReceiverEmail`, `notificationReceiverName`.
 * Use new features from Jelix 1.8.3 when the module is installed with Jelix 1.8.3+
