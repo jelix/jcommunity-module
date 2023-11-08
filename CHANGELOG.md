@@ -1,6 +1,10 @@
 Next
 ===
 
+Version 1.4.1
+=============
+
+* Fix upgrader: regenerate the encryption key if its value is bad.
 
 Version 1.4.0
 =============
