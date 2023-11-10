@@ -1,6 +1,11 @@
 Next
 ===
 
+Version 1.4.2
+=============
+
+* Fix some potentials regression into the reset password feature
+
 Version 1.4.1
 =============
 
