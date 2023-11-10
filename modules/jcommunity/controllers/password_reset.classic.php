@@ -65,7 +65,7 @@ class password_resetCtrl extends \Jelix\JCommunity\AbstractPasswordController
                     $user = $daouser->getByLoginOrEmail($login);
                 }
             }
-            if ($user === null) {
+            if (!$user) {
                 $user = $daouser->getByLogin($login);
                 if (!$user) {
                     $user = $daouser->getByEmail($login);
@@ -75,7 +75,7 @@ class password_resetCtrl extends \Jelix\JCommunity\AbstractPasswordController
         else {
             $user = \jAuth::getUser($login);
             $email = $form->getData('pass_email');
-            if ($user->email != $email) {
+            if (!$user || $user->email != $email) {
                 // bad given email, ignore the error, so no change to discover
                 // if a login is associated to an email or not
                 jForms::destroy('password_reset');
@@ -84,8 +84,6 @@ class password_resetCtrl extends \Jelix\JCommunity\AbstractPasswordController
                 return $rep;
             }
         }
-
-
 
         $passReset = new \Jelix\JCommunity\PasswordReset();
         $result = $passReset->sendEmail($user);
