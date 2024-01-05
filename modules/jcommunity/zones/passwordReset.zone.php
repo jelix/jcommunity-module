@@ -21,7 +21,7 @@ class passwordResetZone extends jZone {
         if ($form == null) {
             $form = jForms::create('password_reset');
 
-            if (\jAuth::getDriverParam('authenticateWith') == 'login-email') {
+            if (\jApp::config()->auth_db['authenticateWith'] == 'login-email') {
                 $form->deactivate('pass_email');
             }
         }

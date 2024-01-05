@@ -57,7 +57,7 @@ class password_resetCtrl extends \Jelix\JCommunity\AbstractPasswordController
         $login = $form->getData('pass_login');
 
         $driver = \jAuth::getDriver();
-        if (\jAuth::getDriverParam('authenticateWith') == 'login-email') {
+        if (\jApp::config()->auth_db['authenticateWith'] == 'login-email') {
             $user = null;
             if (method_exists($driver, 'getDao')) {
                 $daouser = $driver->getDao();
