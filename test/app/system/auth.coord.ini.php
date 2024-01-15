@@ -102,6 +102,7 @@ form="jcommunity~account_admin"
 ; path of the directory where to store files uploaded by the form (jauthdb_admin module)
 ; should be related to the var directory of the application
 uploadsDirectory=
-
+; uncomment to change password reset behaviour (allow login or email in field)
+;authenticateWith=login-email
 
 
