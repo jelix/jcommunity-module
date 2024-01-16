@@ -25,7 +25,13 @@ class passwordResetZone extends jZone {
                 $form->deactivate('pass_email');
             }
         }
-
+        if ($form->isActivated('pass_email')) {
+            $explanationLocale = 'jcommunity~password.form.text.html';
+        } else {
+            $explanationLocale = 'jcommunity~password.form.login-email.text.html';
+            $form->getControl('pass_login')->label = jLocale::get('account.form.login_or_email');
+        }
+        $this->_tpl->assign('explanationlocale',$explanationLocale);
         $this->_tpl->assign('form',$form);
     }
 
