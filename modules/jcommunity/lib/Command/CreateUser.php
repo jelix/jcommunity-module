@@ -82,7 +82,7 @@ class CreateUser extends \Jelix\Scripts\ModuleCommandAbstract
 
         if ($user) {
             $message = \jLocale::get('jcommunity~register.form.login.exists');
-            $code = 1;
+            $code = 2;
         }
 
         if (!$code && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
