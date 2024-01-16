@@ -1,6 +1,13 @@
 Next
 ===
 
+Version 1.4.3
+=============
+
+* fix typo in some locales
+* improve password_reset locales when `login-email` authentification is enabled
+* Fix status error code for `jcommunity:user:create` command
+
 Version 1.4.2
 =============
 
