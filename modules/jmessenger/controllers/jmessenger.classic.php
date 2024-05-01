@@ -18,6 +18,10 @@ class jmessengerCtrl extends jControllerDaoCrud {
     protected $listTemplate = 'jmessenger~listmsg';
     protected $dbProfil = '';
 
+    public $pluginParams = array(
+        '*' => array('auth.required' => true),
+    );
+
     function index() {
         $resp = $this->getResponse('redirect');
         $resp->action = "jmessenger~jmessenger:inbox";
