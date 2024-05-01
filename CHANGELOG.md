@@ -1,6 +1,11 @@
 Next
 ===
 
+Version 1.4.4
+=============
+
+- Fix jmessenger: add authentication requirements
+
 Version 1.4.3
 =============
 
