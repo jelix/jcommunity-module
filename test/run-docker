@@ -12,11 +12,6 @@ if [ "$CMD" == "" ]; then
     CMD="up -d"
 fi
 
-#if [ "$CMD" == "build" ]; then
-#    docker-compose -p jelix-auth-tests build --build-arg TEST_GROUP_ID=$TEST_GROUP_ID --build-arg TEST_USER_ID=$TEST_USER_ID
-#    exit 0
-#fi
-
 if [ "$JCOMMUNITY_WEB_PORT" == "" ]; then
   export JCOMMUNITY_WEB_PORT=8024
 fi
@@ -30,4 +25,4 @@ if [ "$JCOMMUNITY_PGSQL_PORT" == "" ]; then
   export JCOMMUNITY_PGSQL_PORT=8548
 fi
 
-docker-compose -p jelix-jcommunity-tests $CMD
+docker compose -p jelix-jcommunity-tests $CMD
