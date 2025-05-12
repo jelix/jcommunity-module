@@ -12,6 +12,8 @@ if [ "$CMD" == "" ]; then
     CMD="up -d"
 fi
 
+DOCK_COMPOSE_OPTIONS=" -p jelix-jcommunity-tests"
+
 if [ "$JCOMMUNITY_WEB_PORT" == "" ]; then
   export JCOMMUNITY_WEB_PORT=8024
 fi
@@ -25,4 +27,25 @@ if [ "$JCOMMUNITY_PGSQL_PORT" == "" ]; then
   export JCOMMUNITY_PGSQL_PORT=8548
 fi
 
-docker compose -p jelix-jcommunity-tests $CMD
+if [ "$CMD" == "reset" ]; then
+    # Stop/Remove containers
+    docker compose $DOCK_COMPOSE_OPTIONS rm -sfv || true
+    docker image rm jelix-jcommunity-tests_jcommunity_web || true
+    docker image rm jelix-jcommunity-tests_jcommunity_php || true
+    docker image rm jelix-jcommunity-tests_jcommunity_test_pgsql || true
+    docker image rm jelix-jcommunity-tests_jcommunity_test_mysql || true
+
+    # Clean database volume
+    docker volume rm jcommunity_pg_data || true
+    docker volume rm jcommunity_mysql_data || true
+
+    sudo rm -rf $SCRIPTDIR/temp/*
+    sudo rm -rf $SCRIPTDIR/var/log/*
+    sudo rm -rf $SCRIPTDIR/var/db/*
+    sudo rm -rf $SCRIPTDIR/vendor/*
+
+    exit 0
+fi
+
+
+docker compose $DOCK_COMPOSE_OPTIONS $CMD
