@@ -14,7 +14,7 @@ services:
     build:
       context: ./docker-conf/phpfpm
       args:
-        PHP_VERSION: ${PHP_VERSION}
+        php_version: ${PHP_VERSION}
     container_name: jcommunity_php
     environment:
       APP_USER_ID: ${FPM_USER_ID}

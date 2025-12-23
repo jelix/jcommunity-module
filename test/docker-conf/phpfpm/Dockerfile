@@ -1,5 +1,9 @@
-ARG PHP_VERSION
-FROM 3liz/liz-php-fpm:${PHP_VERSION}
+ARG php_version=8.4
+
+FROM 3liz/liz-php-fpm:${php_version}
+
+ARG php_version
+ENV PHP_VERSION=${php_version}
 
 RUN apt-get update; \
     apt-get -y install \
