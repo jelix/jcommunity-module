@@ -1,6 +1,9 @@
 Next
 ===
 
+- fix(mails) add the login into the registration email
+- fix(install) install persistant_encryption_key only for jelix < 1.8.24
+
 Version 1.4.4
 =============
 
@@ -334,4 +337,3 @@ Version 1.0
 
 - same features as 0.2 and 0.3. 
 - Compatibility with Jelix 1.4, 1.5, 1.6
-

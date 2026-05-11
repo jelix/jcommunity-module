@@ -31,11 +31,14 @@ class jcommunityModuleInstaller extends \Jelix\Installer\Module\Installer {
     {
         // create random key for persistant authentication
         $configIni = $helpers->getLiveConfigIni();
-        $currentKey = $configIni->getValue('persistant_encryption_key', 'coordplugin_auth');
-        if ($currentKey === 'exampleOfCryptKey' || $currentKey == '') {
-            $cryptokey = \Defuse\Crypto\Key::createNewRandomKey();
-            $key = $cryptokey->saveToAsciiSafeString();
-            $configIni->setValue('persistant_encryption_key', $key, 'coordplugin_auth');
+
+        if (!class_exists('jAuthPersistentLogin')) {
+            $currentKey = $configIni->getValue('persistant_encryption_key', 'coordplugin_auth');
+            if ($currentKey === 'exampleOfCryptKey' || $currentKey == '') {
+                $cryptokey = \Defuse\Crypto\Key::createNewRandomKey();
+                $key = $cryptokey->saveToAsciiSafeString();
+                $configIni->setValue('persistant_encryption_key', $key, 'coordplugin_auth');
+            }
         }
 
         foreach ($this->getParameter('eps') as $epId) {
@@ -72,9 +75,12 @@ class jcommunityModuleInstaller extends \Jelix\Installer\Module\Installer {
         // handle by jDaoMapper. Then we can use jDaoMapper to create
         // missing fields indicated into the dao (if overloaded)
         if ($daoSelector == 'jcommunity~user') {
-            $helpers->database()->execSQLScript('sql/install');
+            $database->execSQLScript('sql/install');
         }
 
+        if (class_exists('jAuthPersistentLogin')) {
+            $database->execSQLScript('sql/install_jauthremembertoken.schema', 'jelix');
+        }
         $mapper = new jDaoDbMapper($dbProfile);
         $mapper->createTableFromDao($daoSelector);
 

@@ -17,20 +17,26 @@ class jcommunityModuleUpgrader extends \Jelix\Installer\Module\Installer
         // remove deprecated key for Jelix 1.7+
         $liveConfigIni = $helpers->getLiveConfigIni();
         $liveConfigIni->removeValue('persistant_crypt_key', 'coordplugin_auth');
-        $goodkey = $liveConfigIni->getValue('persistant_encryption_key', 'coordplugin_auth');
-        if (!$goodkey) {
-            $cryptokey = \Defuse\Crypto\Key::createNewRandomKey();
-            $key = $cryptokey->saveToAsciiSafeString();
-            $liveConfigIni->setValue('persistant_encryption_key', $key, 'coordplugin_auth');
+
+        if (class_exists('jAuthPersistentLogin')) {
+            $liveConfigIni->removeValue('persistant_encryption_key', 'coordplugin_auth');
         }
         else {
-            // Check that the stored key is good, else regenerate it.
-            try {
-                $cryptokey = \Defuse\Crypto\Key::loadFromAsciiSafeString($goodkey);
-            } catch (\Defuse\Crypto\Exception\CryptoException $e) {
+            $goodkey = $liveConfigIni->getValue('persistant_encryption_key', 'coordplugin_auth');
+            if (!$goodkey) {
                 $cryptokey = \Defuse\Crypto\Key::createNewRandomKey();
                 $key = $cryptokey->saveToAsciiSafeString();
                 $liveConfigIni->setValue('persistant_encryption_key', $key, 'coordplugin_auth');
+            }
+            else  {
+                // Check that the stored key is good, else regenerate it.
+                try {
+                    $cryptokey = \Defuse\Crypto\Key::loadFromAsciiSafeString($goodkey);
+                } catch (\Defuse\Crypto\Exception\CryptoException $e) {
+                    $cryptokey = \Defuse\Crypto\Key::createNewRandomKey();
+                    $key = $cryptokey->saveToAsciiSafeString();
+                    $liveConfigIni->setValue('persistant_encryption_key', $key, 'coordplugin_auth');
+                }
             }
         }
     }
