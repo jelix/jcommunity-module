@@ -3,6 +3,7 @@ Next
 
 - fix(mails) add the login into the registration email
 - fix(install) install persistant_encryption_key only for jelix < 1.8.24
+- fix(forms) remove the max length of the password field. A user should be able to use a password of a big length.
 
 Version 1.4.4
 =============
