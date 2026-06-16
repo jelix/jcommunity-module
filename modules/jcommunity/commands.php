@@ -6,3 +6,4 @@ $application->add(new Command\CreateUser());
 $application->add(new Command\DeleteUser());
 $application->add(new Command\ChangePassword());
 $application->add(new Command\ResetPassword());
+$application->add(new Command\ImportUsers());

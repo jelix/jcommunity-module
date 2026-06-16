@@ -75,6 +75,96 @@ class Registration
         \jAuth::saveNewUser($user);
     }
 
+    public function getAutorizedPropertiesForImport()
+    {
+        $fields = array();
+        /** @var \jDaoRecordBase $account */
+        $account = \jAuth::createUserObject('dummy','');
+        $properties = $account->getProperties();
+        foreach ($properties as $name => $value) {
+            if (! in_array($name, ['id', 'password', 'role', 'keyactivate', 'request_date', 'create_date', 'status'])) {
+                $fields[] = $name;
+            }
+        }
+        $fields[] = '_role_'; // specific field for acl
+        $fields[] = '_ignore_'; // specific name to indicate to ignore the field
+        return $fields;
+    }
+
+    /**
+     * @param array $csvRow values of a csv row
+     * @param array $fieldsOrder list of fields name corresponding to the csv row
+     * @param bool $reset if true, the user is created with a random password and an email for registration is sent
+     * @return object|string the user object if the user is created, the login if the user already exists
+     * @throws \jExceptionSelector
+     */
+    public function importUser($csvRow, $fieldsOrder, $reset)
+    {
+
+        $role = '';
+        $login = '';
+        $properties = [];
+
+        foreach($fieldsOrder as $k=>$field) {
+            if ($field == '_ignore_') {
+                continue;
+            }
+            if ($field == '_role_') {
+                $role = $csvRow[$k];
+                continue;
+            }
+            if ($field == 'login') {
+                $login = $csvRow[$k];
+                continue;
+            }
+            $properties[$field] = $csvRow[$k];
+        }
+
+        if ($login == '') {
+            throw new \DomainException(\jLocale::get('jcommunity~register.import.error.login.missing'));
+        }
+        if (!isset($properties['email']) || $properties['email'] == '') {
+            throw new \DomainException(\jLocale::get('jcommunity~register.import.error.email.missing'));
+        }
+
+        if (!filter_var($properties['email'], FILTER_VALIDATE_EMAIL)) {
+            throw new \DomainException(\jLocale::get('jcommunity~register.email.bad.format'));
+        }
+
+        $user = \jAuth::getUser($login);
+        if ($user) {
+             return $login;
+        }
+
+        $user = \jAuth::createUserObject($login, \jAuthPassword::getRandomPassword());
+
+        foreach($properties as $k=>$v) {
+            $user->$k = $v;
+        }
+
+        if ($reset) {
+            $key = sha1(password_hash($user->login.$user->password.microtime(), PASSWORD_DEFAULT));
+            $user->status = Account::STATUS_NEW;
+            $user->request_date = date('Y-m-d H:i:s');
+            $user->keyactivate = 'A:'.$key;
+            $this->sendRegistrationMail($user,
+                'jcommunity~mail.registration.admin.body.html',
+                'jcommunity~password_confirm_registration:resetform');
+        }
+        else {
+            $user->status = Account::STATUS_VALID;
+        }
+
+        \jAuth::saveNewUser($user);
+        if ($role) {
+            if (\jAcl2DbUserGroup::getGroup($role)) {
+                \jAcl2DbUserGroup::addUserToGroup($login, $role);
+            }
+        }
+        return $user;
+    }
+
+
     public function resendRegistrationMail($user, $byAdmin=false)
     {
         $key = sha1(password_hash($user->login.$user->password.microtime(), PASSWORD_DEFAULT));
