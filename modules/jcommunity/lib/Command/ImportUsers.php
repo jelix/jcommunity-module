@@ -44,12 +44,6 @@ class ImportUsers extends \Jelix\Scripts\ModuleCommandAbstract
                 \jLocale::get('jcommunity~register.cmdline.import.help.parameter.fields', [$fields])
             )
             ->addOption(
-                'reset-password',
-                null,
-                InputOption::VALUE_NONE,
-                \jLocale::get('jcommunity~register.cmdline.create.help.option.reset')
-            )
-            ->addOption(
                 'csv-separator',
                 null,
                 InputOption::VALUE_REQUIRED,
@@ -64,11 +58,30 @@ class ImportUsers extends \Jelix\Scripts\ModuleCommandAbstract
                 '"'
             )
             ->addOption(
+                'reset-password',
+                null,
+                InputOption::VALUE_NONE,
+                \jLocale::get('jcommunity~register.cmdline.create.help.option.reset')
+            )
+            ->addOption(
                 'wait-between-email',
                 null,
                 InputOption::VALUE_REQUIRED,
                 \jLocale::get('jcommunity~register.cmdline.import.help.option.wait'),
                 3
+            )
+            ->addOption(
+                'max-accounts',
+                null,
+                InputOption::VALUE_REQUIRED,
+                \jLocale::get('jcommunity~register.cmdline.import.help.option.maxaccount'),
+                0
+            )
+            ->addOption(
+                'ignore-first-line',
+                null,
+                InputOption::VALUE_NONE,
+                \jLocale::get('jcommunity~register.cmdline.import.help.option.ignorefirstline'),
             )
         ;
     }
@@ -88,6 +101,8 @@ class ImportUsers extends \Jelix\Scripts\ModuleCommandAbstract
         $reset = $input->getOption('reset-password');
         $separator = $input->getOption('csv-separator');
         $enclosure = $input->getOption('csv-enclosure');
+        $maxLines = $input->getOption('max-accounts');
+        $ignoreFirstLine = $input->getOption('ignore-first-line');
         $milliSecRate = $input->getOption('wait-between-email') * 100000;
 
         // check that given fields are ok
@@ -102,19 +117,34 @@ class ImportUsers extends \Jelix\Scripts\ModuleCommandAbstract
 
         $unknownFields = array_diff($fieldsOrder, $authorizedFields);
         if (count($unknownFields)) {
-            $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.error.unknownfield', [implode(',', $unknownFields)]));
+            $output->writeln('<error>'.\jLocale::get('jcommunity~register.cmdline.import.error.unknownfield', [implode(',', $unknownFields)]).'</error>');
             return 1;
+        }
+
+        if (!in_array('login', $fieldsOrder)) {
+            $output->writeln('<error>'.\jLocale::get('jcommunity~register.cmdline.import.error.login.missing').'</error>');
+            return 2;
+        }
+        if (!in_array('email', $fieldsOrder)) {
+            $output->writeln('<error>'.\jLocale::get('jcommunity~register.cmdline.import.error.email.missing').'</error>');
+            return 3;
         }
 
         $handle = fopen($csvFileName, 'r');
         if (!$handle) {
-            $output->writeln("Impossible d'ouvrir le fichier $csvFileName");
+            $output->writeln('<error>'.\jLocale::get('jcommunity~register.cmdline.import.error.opening.file', [$csvFileName]).'</error>');// FIXME
             return 1;
         }
 
         $line = 0;
+        $importedLines = 0;
         while (($csvRow = fgetcsv($handle, null, $separator, $enclosure, '\\')) !== false) {
             $line++;
+
+            if ($ignoreFirstLine && $line == 1) {
+                continue;
+            }
+
             if (count($csvRow) < count($fieldsOrder)) {
                 $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.error.bad.field.count', [$line]));
                 continue;
@@ -123,13 +153,17 @@ class ImportUsers extends \Jelix\Scripts\ModuleCommandAbstract
             try {
                 $user = $this->registration->importUser($csvRow, $fieldsOrder, $reset);
                 if (is_string($user)) {
-                    $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.notice.login.exists', [$user, $line]));
+                    $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.notice.login.exists', [$line, $user]));
                 }
-                else if ($output->isVerbose()) {
-                    $output->writeln($line.': '. $user->login);
+                else {
+                    $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.notice.login.imported', [$line, $user->login]));
                 }
             } catch (\Exception $e) {
                 $output->writeln($e->getMessage().' (line '.$line.')');
+            }
+
+            if ($maxLines && $importedLines >= $maxLines) {
+                break;
             }
 
             if ($reset) {
