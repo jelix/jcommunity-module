@@ -1,8 +1,10 @@
 Next
 ===
 
-- new command `jcommunity:user:import` to import accounts from a CSV file
+Version 1.4.6
+=============
 
+- new command `jcommunity:user:import` to import accounts from a CSV file
 
 Version 1.4.5
 =============
