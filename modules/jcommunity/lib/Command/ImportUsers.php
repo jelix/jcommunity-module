@@ -83,6 +83,12 @@ class ImportUsers extends \Jelix\Scripts\ModuleCommandAbstract
                 InputOption::VALUE_NONE,
                 \jLocale::get('jcommunity~register.cmdline.import.help.option.ignorefirstline'),
             )
+            ->addOption(
+                'dry-run',
+                null,
+                InputOption::VALUE_NONE,
+                \jLocale::get('jcommunity~register.cmdline.import.help.option.dryRun'),
+            )
         ;
     }
 
@@ -103,6 +109,7 @@ class ImportUsers extends \Jelix\Scripts\ModuleCommandAbstract
         $enclosure = $input->getOption('csv-enclosure');
         $maxLines = $input->getOption('max-accounts');
         $ignoreFirstLine = $input->getOption('ignore-first-line');
+        $dryRun = $input->getOption('dry-run');
         $milliSecRate = $input->getOption('wait-between-email') * 100000;
 
         // check that given fields are ok
@@ -138,6 +145,7 @@ class ImportUsers extends \Jelix\Scripts\ModuleCommandAbstract
 
         $line = 0;
         $importedLines = 0;
+        $existingUsersCount = 0;
         while (($csvRow = fgetcsv($handle, null, $separator, $enclosure, '\\')) !== false) {
             $line++;
 
@@ -154,9 +162,11 @@ class ImportUsers extends \Jelix\Scripts\ModuleCommandAbstract
                 $user = $this->registration->importUser($csvRow, $fieldsOrder, $reset);
                 if (is_string($user)) {
                     $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.notice.login.exists', [$line, $user]));
+                    $existingUsersCount++;
                 }
                 else {
                     $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.notice.login.imported', [$line, $user->login]));
+                    $importedLines++;
                 }
             } catch (\Exception $e) {
                 $output->writeln($e->getMessage().' (line '.$line.')');
@@ -171,7 +181,16 @@ class ImportUsers extends \Jelix\Scripts\ModuleCommandAbstract
             }
         }
         fclose($handle);
-
+        if ($dryRun) {
+            $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.results.dryrun.message'));
+            $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.results.dryrun.imported.account.count', [$importedLines]));
+            $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.results.dryrun.account.existing.count', [$existingUsersCount]));
+        }
+        else {
+            $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.results.message'));
+            $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.results.imported.account.count', [$importedLines]));
+            $output->writeln(\jLocale::get('jcommunity~register.cmdline.import.results.account.existing.count', [$existingUsersCount]));
+        }
         return 0;
     }
 
