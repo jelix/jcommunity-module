@@ -1,6 +1,13 @@
 Next
 ===
 
+Version 1.4.7
+=============
+
+- fixed a PHP error into the import script when an account already exists
+- new option `--dry-run` for the import script
+
+
 Version 1.4.6
 =============
 
